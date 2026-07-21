@@ -198,17 +198,17 @@ local function createGlow(parent)
     end
 end
 
--- Ultra Modern Notification System Holder
+-- Ultra Modern Notification System Holder (Posicionado en la PARTE SUPERIOR CENTRAL)
 local notifHolder = Instance.new("Frame")
-notifHolder.Size = UDim2.new(0, 340, 1, -20)
-notifHolder.Position = UDim2.new(1, -355, 0, 10)
+notifHolder.Size = UDim2.new(0, 360, 0, 400)
+notifHolder.Position = UDim2.new(0.5, -180, 0, 10)
 notifHolder.BackgroundTransparency = 1
 notifHolder.ZIndex = 100
 notifHolder.Parent = screen
 
 local notifLayout = Instance.new("UIListLayout")
-notifLayout.VerticalAlignment = Enum.VerticalAlignment.Bottom
-notifLayout.HorizontalAlignment = Enum.HorizontalAlignment.Right
+notifLayout.VerticalAlignment = Enum.VerticalAlignment.Top
+notifLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
 notifLayout.SortOrder = Enum.SortOrder.LayoutOrder
 notifLayout.Padding = UDim.new(0, 10)
 notifLayout.Parent = notifHolder
@@ -216,8 +216,8 @@ notifLayout.Parent = notifHolder
 local function showNotification(title, message, duration)
     task.spawn(function()
         local card = Instance.new("Frame")
-        card.Size = UDim2.new(0, 330, 0, 80)
-        card.Position = UDim2.new(1, 80, 0, 0)
+        card.Size = UDim2.new(0, 340, 0, 80)
+        card.Position = UDim2.new(0, 0, 0, -90) -- Entran desde arriba
         card.BackgroundColor3 = THEME.Container
         card.BackgroundTransparency = 0.05
         card.ZIndex = 101
@@ -279,7 +279,7 @@ local function showNotification(title, message, duration)
         task.wait(duration or 4)
 
         local tweenOut = TweenService:Create(card, TweenInfo.new(0.4, Enum.EasingStyle.Quart, Enum.EasingDirection.In), {
-            Position = UDim2.new(1, 80, 0, 0)
+            Position = UDim2.new(0, 0, 0, -90)
         })
         tweenOut:Play()
         tweenOut.Completed:Wait()
@@ -568,6 +568,14 @@ verifyBtn.MouseButton1Click:Connect(function()
         tweenIn:Play()
 
         showNotification("<font color='#34D399'>// KEY VALIDADA</font>", "<font color='#F5F3FF'>Acceso cuántico concedido. Iniciando Good Vibes Ultimate v4.0.</font>", 5)
+
+        -- ⚡ 2 NOTIFICACIONES INICIALES CASI SEGUIDAS PARA QUE NADIE LAS PASE POR ALTO
+        task.spawn(function()
+            task.wait(1.5)
+            showNotification("<font color='#F472B6'>// LA PATRONA</font>", "<font color='#F5F3FF'>¡No olvides ir a seguir a Emily en Instagram (<font color='#38BDF8'>mittyxkittyy</font>) para más scripts!</font>", 7)
+            task.wait(3.5)
+            showNotification("<font color='#38BDF8'>// ALERTA DE VIBES</font>", "<font color='#F5F3FF'>¡Únete al servidor de Discord oficial para enterarte de todas las actualizaciones! 💜</font>", 7)
+        end)
 
         task.spawn(function()
             task.wait(7)
@@ -1370,3 +1378,4 @@ se2("Neon Kiss","225975820", "283545583", "0", "0","0","0",0.2, 0, CFrame.new(0,
 se("Cyber Sleepy","282574440", "106772613", "0", "0","0","0",0, 1, CFrame.new(0, 0, 0), CFrame.new (0, 0, 0), 0, 0)
 se("Neural Lay Down","106772613", "181526230", "0", "0","0","0",0, 1, CFrame.new(0, 0, 0), CFrame.new (0, 0, 0), 0, 0)
 se2("Matrix Embrace","225975820", "106772613", "182789003", "0","0","0",0.5, 2, CFrame.new(0, 0, -1.2), CFrame.new(0, 0, -1.2), 20, 0.5)
+
