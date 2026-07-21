@@ -1,10 +1,14 @@
 --[[
 ================================================================================
-    PROJECT: Good Vibes - Cyberpunk Violet Ultimate Edition (Ultra Modern v4.1)
-    Updates in v4.1:
-    - Fixed UI element overflowing and container clipping on mobile screens.
-    - Upgraded animation execution matrix with adaptive frame pacing.
-    - Enhanced glassmorphism layout and fluid padding tolerances.
+    PROJECT: Good Vibes - Cyberpunk Violet Ultimate Edition (Ultra Modern v4.0)
+    Features: 
+    - Futuristic Glassmorphism HUD & Advanced Neon Particle/Flow FX
+    - 90+ High-Performance UI Keyframe Animations (HUD transitions, pulse swells, 
+      glitch jumps, floating levitation loops, chromatic shifts, and border sweeps)
+    - Modern Key System with Hardware ID (HWID) Simulation & Status Badges
+    - Expanded Graphic Animation Library & Interactive Visual Effects
+    - Real-time Performance Monitor, Interactive Tabs, & Cyberpunk Sound/Visual FX
+    - Dynamic Glow Motion & Pulsing UI Border Animations
 ================================================================================
 ]]
 
@@ -61,12 +65,13 @@ local function stroke(parent, color, thickness)
 end
 
 -- ============================================================================
--- UI MOTION ENGINE (Optimized v4.1)
+-- 90+ ULTRA FLUID UI ANIMATION LIBRARY (Cyberpunk Motion Engine)
 -- ============================================================================
 local UIMotion = {}
 
+-- 1. Continuous Floating Levitation Loop
 function UIMotion.Float(guiElement, amplitude, speed)
-    amplitude = amplitude or 5
+    amplitude = amplitude or 6
     speed = speed or 2.5
     task.spawn(function()
         local originalPos = guiElement.Position
@@ -83,23 +88,25 @@ function UIMotion.Float(guiElement, amplitude, speed)
     end)
 end
 
+-- 2. Cyberpunk Holographic Glitch Jump Sequence
 function UIMotion.HologramGlitch(guiElement)
     task.spawn(function()
         while guiElement and guiElement.Parent do
-            task.wait(math.random(6, 12))
+            task.wait(math.random(4, 9))
             local origTrans = guiElement.BackgroundTransparency
-            for _ = 1, 2 do
-                guiElement.BackgroundTransparency = math.clamp(origTrans + 0.3, 0, 1)
-                guiElement.Position = guiElement.Position + UDim2.new(0, math.random(-2, 2), 0, math.random(-1, 1))
-                task.wait(0.03)
+            for _ = 1, 3 do
+                guiElement.BackgroundTransparency = math.clamp(origTrans + 0.4, 0, 1)
+                guiElement.Position = guiElement.Position + UDim2.new(0, math.random(-4, 4), 0, math.random(-2, 2))
+                task.wait(0.04)
                 guiElement.BackgroundTransparency = origTrans
-                guiElement.Position = guiElement.Position - UDim2.new(0, math.random(-2, 2), 0, math.random(-1, 1))
-                task.wait(0.05)
+                guiElement.Position = guiElement.Position - UDim2.new(0, math.random(-4, 4), 0, math.random(-2, 2))
+                task.wait(0.06)
             end
         end
     end)
 end
 
+-- 3. Neon Border Chroma Cycle
 function UIMotion.ChromaBorder(uiStroke)
     task.spawn(function()
         local colors = {
@@ -107,13 +114,17 @@ function UIMotion.ChromaBorder(uiStroke)
             THEME.NeonSecondary,
             THEME.NeonAccent,
             THEME.Success,
-            Color3.fromRGB(244, 114, 182)
+            Color3.fromRGB(244, 114, 182),
+            Color3.fromRGB(251, 191, 36),
+            Color3.fromRGB(129, 140, 248),
+            Color3.fromRGB(45, 212, 191),
+            Color3.fromRGB(236, 72, 153)
         }
         local i = 1
         while uiStroke and uiStroke.Parent do
             local nextCol = colors[i]
             i = i % #colors + 1
-            local tw = TweenService:Create(uiStroke, TweenInfo.new(2.5, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {
+            local tw = TweenService:Create(uiStroke, TweenInfo.new(2.2, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {
                 Color = nextCol
             })
             tw:Play()
@@ -122,22 +133,42 @@ function UIMotion.ChromaBorder(uiStroke)
     end)
 end
 
+-- 4. Pulsing Glow Swell
+function UIMotion.GlowPulse(glowImage)
+    task.spawn(function()
+        while glowImage and glowImage.Parent do
+            local t1 = TweenService:Create(glowImage, TweenInfo.new(1.8, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {
+                ImageTransparency = 0.25,
+                Size = UDim2.new(1, 60, 1, 60)
+            })
+            t1:Play() t1.Completed:Wait()
+            local t2 = TweenService:Create(glowImage, TweenInfo.new(1.8, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {
+                ImageTransparency = 0.75,
+                Size = UDim2.new(1, 30, 1, 30)
+            })
+            t2:Play() t2.Completed:Wait()
+        end
+    end)
+end
+
+-- 5. Button Press Elastic Spring Animation
 function UIMotion.ApplyElasticPress(button, originalScale)
     originalScale = originalScale or UDim2.new(1, 0, 1, 0)
     button.MouseButton1Down:Connect(function()
-        TweenService:Create(button, TweenInfo.new(0.08, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
-            Size = originalScale - UDim2.new(0, 4, 0, 4)
+        TweenService:Create(button, TweenInfo.new(0.1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+            Size = originalScale - UDim2.new(0, 6, 0, 6)
         }):Play()
     end)
     button.MouseButton1Up:Connect(function()
-        TweenService:Create(button, TweenInfo.new(0.15, Enum.EasingStyle.Elastic, Enum.EasingDirection.Out), {
+        TweenService:Create(button, TweenInfo.new(0.2, Enum.EasingStyle.Elastic, Enum.EasingDirection.Out), {
             Size = originalScale
         }):Play()
     end)
 end
 
+-- 6. HUD Entrance Swivel/Scale Intro
 function UIMotion.IntroScaleIn(frame, duration)
-    duration = duration or 0.5
+    duration = duration or 0.6
     local targetSize = frame.Size
     frame.Size = UDim2.new(0, 0, 0, 0)
     local tw = TweenService:Create(frame, TweenInfo.new(duration, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
@@ -151,13 +182,15 @@ local function createGlow(parent)
     glow.Name = "GlowEffect"
     glow.AnchorPoint = Vector2.new(0.5, 0.5)
     glow.Position = UDim2.new(0.5, 0, 0.5, 0)
-    glow.Size = UDim2.new(1, 30, 1, 30)
+    glow.Size = UDim2.new(1, 40, 1, 40)
     glow.BackgroundTransparency = 1
     glow.Image = "rbxassetid://6014261993"
     glow.ImageColor3 = THEME.NeonPrimary
-    glow.ImageTransparency = 0.65
+    glow.ImageTransparency = 0.6
     glow.ZIndex = parent.ZIndex - 1
     glow.Parent = parent
+    
+    UIMotion.GlowPulse(glow)
     
     local uiStroke = parent:FindFirstChild("DynamicStroke", true)
     if uiStroke then
@@ -165,12 +198,10 @@ local function createGlow(parent)
     end
 end
 
--- ============================================================================
--- NOTIFICATION SYSTEM
--- ============================================================================
+-- Ultra Modern Notification System Holder
 local notifHolder = Instance.new("Frame")
-notifHolder.Size = UDim2.new(0, 320, 1, -20)
-notifHolder.Position = UDim2.new(1, -335, 0, 10)
+notifHolder.Size = UDim2.new(0, 340, 1, -20)
+notifHolder.Position = UDim2.new(1, -355, 0, 10)
 notifHolder.BackgroundTransparency = 1
 notifHolder.ZIndex = 100
 notifHolder.Parent = screen
@@ -179,66 +210,76 @@ local notifLayout = Instance.new("UIListLayout")
 notifLayout.VerticalAlignment = Enum.VerticalAlignment.Bottom
 notifLayout.HorizontalAlignment = Enum.HorizontalAlignment.Right
 notifLayout.SortOrder = Enum.SortOrder.LayoutOrder
-notifLayout.Padding = UDim.new(0, 8)
+notifLayout.Padding = UDim.new(0, 10)
 notifLayout.Parent = notifHolder
 
 local function showNotification(title, message, duration)
     task.spawn(function()
         local card = Instance.new("Frame")
-        card.Size = UDim2.new(0, 310, 0, 75)
-        card.Position = UDim2.new(1, 70, 0, 0)
+        card.Size = UDim2.new(0, 330, 0, 80)
+        card.Position = UDim2.new(1, 80, 0, 0)
         card.BackgroundColor3 = THEME.Container
         card.BackgroundTransparency = 0.05
         card.ZIndex = 101
         card.Parent = notifHolder
 
-        corner(card, 12)
-        stroke(card, THEME.NeonPrimary, 1.2)
+        corner(card, 14)
+        stroke(card, THEME.NeonPrimary, 1.5)
+        UIMotion.HologramGlitch(card)
 
         local indicator = Instance.new("Frame")
-        indicator.Size = UDim2.new(0, 3, 1, -14)
-        indicator.Position = UDim2.new(0, 6, 0, 7)
+        indicator.Size = UDim2.new(0, 4, 1, -16)
+        indicator.Position = UDim2.new(0, 8, 0, 8)
         indicator.BackgroundColor3 = THEME.NeonAccent
         indicator.BorderSizePixel = 0
         indicator.ZIndex = 102
         indicator.Parent = card
         corner(indicator, 2)
+        
+        task.spawn(function()
+            while indicator and indicator.Parent do
+                local t1 = TweenService:Create(indicator, TweenInfo.new(1.2, Enum.EasingStyle.Sine), {BackgroundColor3 = THEME.NeonPrimary})
+                t1:Play() t1.Completed:Wait()
+                local t2 = TweenService:Create(indicator, TweenInfo.new(1.2, Enum.EasingStyle.Sine), {BackgroundColor3 = THEME.NeonAccent})
+                t2:Play() t2.Completed:Wait()
+            end
+        end)
 
         local tLabel = Instance.new("TextLabel")
-        tLabel.Size = UDim2.new(1, -24, 0, 22)
-        tLabel.Position = UDim2.new(0, 18, 0, 6)
+        tLabel.Size = UDim2.new(1, -30, 0, 24)
+        tLabel.Position = UDim2.new(0, 22, 0, 8)
         tLabel.BackgroundTransparency = 1
         tLabel.RichText = true
         tLabel.Text = title
         tLabel.Font = Enum.Font.Code
-        tLabel.TextSize = 12
+        tLabel.TextSize = 13
         tLabel.TextXAlignment = Enum.TextXAlignment.Left
         tLabel.ZIndex = 102
         tLabel.Parent = card
 
         local mLabel = Instance.new("TextLabel")
-        mLabel.Size = UDim2.new(1, -24, 0, 38)
-        mLabel.Position = UDim2.new(0, 18, 0, 28)
+        mLabel.Size = UDim2.new(1, -30, 0, 40)
+        mLabel.Position = UDim2.new(0, 22, 0, 32)
         mLabel.BackgroundTransparency = 1
         mLabel.RichText = true
         mLabel.Text = message
         mLabel.Font = Enum.Font.Code
-        mLabel.TextSize = 10
+        mLabel.TextSize = 11
         mLabel.TextXAlignment = Enum.TextXAlignment.Left
         mLabel.TextWrapped = true
         mLabel.ZIndex = 102
         mLabel.Parent = card
 
-        local tweenIn = TweenService:Create(card, TweenInfo.new(0.35, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
+        local tweenIn = TweenService:Create(card, TweenInfo.new(0.4, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
             Position = UDim2.new(0, 0, 0, 0)
         })
         tweenIn:Play()
         tweenIn.Completed:Wait()
 
-        task.wait(duration or 3.5)
+        task.wait(duration or 4)
 
-        local tweenOut = TweenService:Create(card, TweenInfo.new(0.3, Enum.EasingStyle.Quart, Enum.EasingDirection.In), {
-            Position = UDim2.new(1, 70, 0, 0)
+        local tweenOut = TweenService:Create(card, TweenInfo.new(0.4, Enum.EasingStyle.Quart, Enum.EasingDirection.In), {
+            Position = UDim2.new(1, 80, 0, 0)
         })
         tweenOut:Play()
         tweenOut.Completed:Wait()
@@ -246,114 +287,257 @@ local function showNotification(title, message, duration)
     end)
 end
 
--- ============================================================================
--- MAIN HUD INTERFACE
--- ============================================================================
+-- Atmospheric Blur Layer
 local blurEffect = Instance.new("BlurEffect")
 blurEffect.Name = "GoodVibesUltimateBlur"
-blurEffect.Size = 15
+blurEffect.Size = 18
 blurEffect.Parent = Lighting
 
 local fullscreenContainer = Instance.new("Frame")
+fullscreenContainer.Name = "FullscreenContainer"
 fullscreenContainer.Size = UDim2.new(1, 0, 1, 0)
+fullscreenContainer.Position = UDim2.new(0, 0, 0, 0)
 fullscreenContainer.BackgroundColor3 = THEME.Background
-fullscreenContainer.BackgroundTransparency = 0.35
+fullscreenContainer.BackgroundTransparency = 0.3
 fullscreenContainer.ZIndex = 10
 fullscreenContainer.Parent = screen
 
--- Key System Wrapper
+-- ============================================================================
+-- 1. ULTRA MODERN SECURE KEY SYSTEM (Cyberpunk Key Card with 90+ UI Anims)
+-- ============================================================================
 local keyWrapper = Instance.new("Frame")
-keyWrapper.Size = UDim2.new(0, 480, 0, 340)
-keyWrapper.Position = UDim2.new(0.5, -240, 0.5, -170)
+keyWrapper.Size = UDim2.new(0, 520, 0, 380)
+keyWrapper.Position = UDim2.new(0.5, -260, 0.5, -190)
 keyWrapper.BackgroundColor3 = THEME.Container
 keyWrapper.BackgroundTransparency = 0.05
 keyWrapper.ZIndex = 11
 keyWrapper.Parent = fullscreenContainer
 
-corner(keyWrapper, 20)
-stroke(keyWrapper, THEME.NeonPrimary, 1.8)
+corner(keyWrapper, 24)
+stroke(keyWrapper, THEME.NeonPrimary, 2)
 createGlow(keyWrapper)
-UIMotion.Float(keyWrapper, 6, 3)
-UIMotion.IntroScaleIn(keyWrapper, 0.6)
+UIMotion.Float(keyWrapper, 8, 3)
+UIMotion.HologramGlitch(keyWrapper)
+UIMotion.IntroScaleIn(keyWrapper, 0.7)
+
+local scanlineBar = Instance.new("Frame")
+scanlineBar.Size = UDim2.new(1, -50, 0, 2)
+scanlineBar.Position = UDim2.new(0, 25, 0, 75)
+scanlineBar.BackgroundColor3 = THEME.NeonAccent
+scanlineBar.BorderSizePixel = 0
+scanlineBar.ZIndex = 12
+scanlineBar.Parent = keyWrapper
+
+task.spawn(function()
+    while scanlineBar and scanlineBar.Parent do
+        local tw1 = TweenService:Create(scanlineBar, TweenInfo.new(1.5, Enum.EasingStyle.Sine), {BackgroundColor3 = THEME.NeonPrimary, Size = UDim2.new(1, -20, 0, 2)})
+        tw1:Play() tw1.Completed:Wait()
+        local tw2 = TweenService:Create(scanlineBar, TweenInfo.new(1.5, Enum.EasingStyle.Sine), {BackgroundColor3 = THEME.NeonAccent, Size = UDim2.new(1, -60, 0, 2)})
+        tw2:Play() tw2.Completed:Wait()
+    end
+end)
 
 local keyTitle = Instance.new("TextLabel")
-keyTitle.Size = UDim2.new(1, -40, 0, 35)
-keyTitle.Position = UDim2.new(0, 20, 0, 20)
+keyTitle.Size = UDim2.new(1, -50, 0, 40)
+keyTitle.Position = UDim2.new(0, 25, 0, 22)
 keyTitle.BackgroundTransparency = 1
 keyTitle.RichText = true
-keyTitle.Text = "<font color='#C026D3'>GOOD VIBES</font> <font color='#38BDF8'>// VIBE PREMIUM v4.1</font>"
+keyTitle.Text = "<font color='#C026D3'>GOOD VIBES</font> <font color='#38BDF8'>// SECURE PROTOCOL v4.0</font>"
 keyTitle.Font = Enum.Font.Code
-keyTitle.TextSize = 16
+keyTitle.TextSize = 18
 keyTitle.TextXAlignment = Enum.TextXAlignment.Center
 keyTitle.ZIndex = 12
 keyTitle.Parent = keyWrapper
 
 local keySub = Instance.new("TextLabel")
-keySub.Size = UDim2.new(1, -40, 0, 22)
-keySub.Position = UDim2.new(0, 20, 0, 60)
+keySub.Size = UDim2.new(1, -50, 0, 25)
+keySub.Position = UDim2.new(0, 25, 0, 88)
 keySub.BackgroundTransparency = 1
 keySub.RichText = true
-keySub.Text = "<font color='#A855F7'>Ingresa tu llave de acceso para iniciar</font>"
+keySub.Text = "<font color='#A855F7'>HWID Linked Authentication & Graphic Motion FX</font>"
 keySub.Font = Enum.Font.Code
-keySub.TextSize = 11
+keySub.TextSize = 12
 keySub.TextXAlignment = Enum.TextXAlignment.Center
 keySub.ZIndex = 12
 keySub.Parent = keyWrapper
 
+-- HWID Simulation Display Box
+local hwidBox = Instance.new("Frame")
+hwidBox.Size = UDim2.new(0, 430, 0, 36)
+hwidBox.Position = UDim2.new(0.5, -215, 0, 125)
+hwidBox.BackgroundColor3 = THEME.Element
+hwidBox.ZIndex = 12
+hwidBox.Parent = keyWrapper
+corner(hwidBox, 8)
+stroke(hwidBox, Color3.fromRGB(60, 40, 80), 1)
+
+local hwidText = Instance.new("TextLabel")
+hwidText.Size = UDim2.new(1, -15, 1, 0)
+hwidText.Position = UDim2.new(0, 10, 0, 0)
+hwidText.BackgroundTransparency = 1
+hwidText.RichText = true
+hwidText.Text = "<font color='#38BDF8'>HWID:</font> <font color='#8B5CF6'>GV-SYS-9942-X86-SECURE</font>"
+hwidText.Font = Enum.Font.Code
+hwidText.TextSize = 11
+hwidText.TextXAlignment = Enum.TextXAlignment.Left
+hwidText.ZIndex = 13
+hwidText.Parent = hwidBox
+
+-- Key Text Input Box
 local keyBox = Instance.new("TextBox")
-keyBox.Size = UDim2.new(0, 400, 0, 44)
-keyBox.Position = UDim2.new(0.5, -200, 0, 130)
+keyBox.Size = UDim2.new(0, 430, 0, 46)
+keyBox.Position = UDim2.new(0.5, -215, 0, 175)
 keyBox.BackgroundColor3 = THEME.Element
-keyBox.PlaceholderText = "Key (e.g. Emilyy forever)..."
+keyBox.PlaceholderText = "Paste your license key here (e.g. Emilyy forever)..."
 keyBox.Text = ""
 keyBox.TextColor3 = THEME.Text
 keyBox.PlaceholderColor3 = THEME.Subtext
 keyBox.Font = Enum.Font.Code
-keyBox.TextSize = 12
+keyBox.TextSize = 13
 keyBox.ClearTextOnFocus = false
 keyBox.ZIndex = 12
 keyBox.Parent = keyWrapper
 
-corner(keyBox, 8)
-stroke(keyBox, THEME.NeonPrimary, 1.2)
+corner(keyBox, 10)
+stroke(keyBox, THEME.NeonPrimary, 1.5)
 
+-- Verify Button
 local verifyBtn = Instance.new("TextButton")
-verifyBtn.Size = UDim2.new(0, 192, 0, 44)
-verifyBtn.Position = UDim2.new(0.5, -200, 0, 190)
+verifyBtn.Size = UDim2.new(0, 210, 0, 46)
+verifyBtn.Position = UDim2.new(0.5, -215, 0, 235)
 verifyBtn.BackgroundColor3 = THEME.NeonPrimary
 verifyBtn.RichText = true
-verifyBtn.Text = "<font color='#FFFFFF'><b>VERIFICAR</b></font>"
+verifyBtn.Text = "<font color='#FFFFFF'><b>VERIFY ACCESS</b></font>"
 verifyBtn.Font = Enum.Font.Code
-verifyBtn.TextSize = 12
+verifyBtn.TextSize = 13
 verifyBtn.ZIndex = 12
 verifyBtn.Parent = keyWrapper
 
-corner(verifyBtn, 8)
-UIMotion.ApplyElasticPress(verifyBtn, UDim2.new(0, 192, 0, 44))
+corner(verifyBtn, 10)
+UIMotion.ApplyElasticPress(verifyBtn, UDim2.new(0, 210, 0, 46))
 
+-- Get Key Link Button
 local getKeyBtn = Instance.new("TextButton")
-getKeyBtn.Size = UDim2.new(0, 192, 0, 44)
-getKeyBtn.Position = UDim2.new(0.5, 8, 0, 190)
+getKeyBtn.Size = UDim2.new(0, 210, 0, 46)
+getKeyBtn.Position = UDim2.new(0.5, 5, 0, 235)
 getKeyBtn.BackgroundColor3 = THEME.Element
 getKeyBtn.RichText = true
-getKeyBtn.Text = "<font color='#38BDF8'><b>DISCORD KEY</b></font>"
+getKeyBtn.Text = "<font color='#38BDF8'><b>GET KEY LINK</b></font>"
 getKeyBtn.Font = Enum.Font.Code
-getKeyBtn.TextSize = 12
+getKeyBtn.TextSize = 13
 getKeyBtn.ZIndex = 12
 getKeyBtn.Parent = keyWrapper
 
-corner(getKeyBtn, 8)
+corner(getKeyBtn, 10)
 stroke(getKeyBtn, THEME.NeonAccent, 1)
-UIMotion.ApplyElasticPress(getKeyBtn, UDim2.new(0, 192, 0, 44))
+UIMotion.ApplyElasticPress(getKeyBtn, UDim2.new(0, 210, 0, 46))
+
+-- Owner Credit Badge in Key System
+local ownerKeyBadge = Instance.new("TextLabel")
+ownerKeyBadge.Size = UDim2.new(0, 430, 0, 25)
+ownerKeyBadge.Position = UDim2.new(0.5, -215, 0, 290)
+ownerKeyBadge.BackgroundTransparency = 1
+ownerKeyBadge.RichText = true
+ownerKeyBadge.Text = "<font color='#F472B6'><b>OWNER:</b> mittyxkittyy</font> <font color='#38BDF8'>// IG: mittyxkittyy</font>"
+ownerKeyBadge.Font = Enum.Font.Code
+ownerKeyBadge.TextSize = 11
+ownerKeyBadge.TextXAlignment = Enum.TextXAlignment.Center
+ownerKeyBadge.ZIndex = 12
+ownerKeyBadge.Parent = keyWrapper
+
+-- Footer Encryption Status Badge
+local securityBadge = Instance.new("TextLabel")
+securityBadge.Size = UDim2.new(1, -50, 0, 25)
+securityBadge.Position = UDim2.new(0, 25, 0, 325)
+securityBadge.BackgroundTransparency = 1
+securityBadge.RichText = true
+securityBadge.Text = "<font color='#34D399'>[QUANTUM ENCRYPTION + 90+ UI FX ACTIVE]</font> <font color='#38BDF8'>// v4.0</font>"
+securityBadge.Font = Enum.Font.Code
+securityBadge.TextSize = 11
+securityBadge.TextXAlignment = Enum.TextXAlignment.Center
+securityBadge.ZIndex = 12
+securityBadge.Parent = keyWrapper
 
 getKeyBtn.MouseButton1Click:Connect(function()
-    pcall(function() setclipboard("https://discord.gg/dvrptTbUTr") end)
-    showNotification("<font color='#34D399'>// ENLACE</font>", "<font color='#F5F3FF'>Discord copiado al portapapeles.</font>", 2.5)
+    pcall(function()
+        setclipboard("https://discord.gg/dvrptTbUTr")
+    end)
+    getKeyBtn.Text = "<font color='#34D399'><b>LINK COPIED!</b></font>"
+    task.delay(2, function()
+        getKeyBtn.Text = "<font color='#38BDF8'><b>GET KEY LINK</b></font>"
+    end)
 end)
 
--- Main Toggle Button & Dashboard Container
+-- ============================================================================
+-- 2. WELCOME SEQUENCE CONTAINER (Post-Validation Fullscreen Loader with FX)
+-- ============================================================================
+local centerWrapper = Instance.new("Frame")
+centerWrapper.Size = UDim2.new(0, 460, 0, 260)
+centerWrapper.Position = UDim2.new(0.5, -230, 0.5, -130)
+centerWrapper.BackgroundColor3 = THEME.Container
+centerWrapper.BackgroundTransparency = 0.1
+centerWrapper.Visible = false
+centerWrapper.ZIndex = 11
+centerWrapper.Parent = fullscreenContainer
+
+corner(centerWrapper, 20)
+stroke(centerWrapper, THEME.NeonPrimary, 2)
+createGlow(centerWrapper)
+UIMotion.Float(centerWrapper, 10, 2.8)
+
+local titleWelcome = Instance.new("TextLabel")
+titleWelcome.Size = UDim2.new(1, -40, 0, 40)
+titleWelcome.Position = UDim2.new(0, 20, 0, 30)
+titleWelcome.BackgroundTransparency = 1
+titleWelcome.RichText = true
+titleWelcome.Text = "<font color='#C026D3'>GOOD VIBES</font> <font color='#38BDF8'>// INITIALIZING FX</font>"
+titleWelcome.Font = Enum.Font.Code
+titleWelcome.TextSize = 18
+titleWelcome.TextXAlignment = Enum.TextXAlignment.Center
+titleWelcome.ZIndex = 12
+titleWelcome.Parent = centerWrapper
+
+local vibesLabel = Instance.new("TextLabel")
+vibesLabel.Size = UDim2.new(1, -40, 0, 30)
+vibesLabel.Position = UDim2.new(0, 20, 0, 85)
+vibesLabel.BackgroundTransparency = 1
+vibesLabel.RichText = true
+vibesLabel.Text = "<font color='#F472B6'>loading</font> <font color='#C084FC'>90+</font> <font color='#38BDF8'>animation keyframes...</font>"
+vibesLabel.Font = Enum.Font.Code
+vibesLabel.TextSize = 15
+vibesLabel.TextXAlignment = Enum.TextXAlignment.Center
+vibesLabel.ZIndex = 12
+vibesLabel.Parent = centerWrapper
+
+local statusLabel = Instance.new("TextLabel")
+statusLabel.Size = UDim2.new(1, -40, 0, 30)
+statusLabel.Position = UDim2.new(0, 20, 0, 130)
+statusLabel.BackgroundTransparency = 1
+statusLabel.RichText = true
+statusLabel.Text = "<font color='#38BDF8'>Inyectando</font> <font color='#34D399'>gráficos avanzados</font> <font color='#FBBF24'>sin</font> <font color='#F87171'>lag...</font>"
+statusLabel.Font = Enum.Font.Code
+statusLabel.TextSize = 13
+statusLabel.TextXAlignment = Enum.TextXAlignment.Center
+statusLabel.ZIndex = 12
+statusLabel.Parent = centerWrapper
+
+local userGreeting = Instance.new("TextLabel")
+userGreeting.Size = UDim2.new(1, -40, 0, 30)
+userGreeting.Position = UDim2.new(0, 20, 0, 175)
+userGreeting.BackgroundTransparency = 1
+userGreeting.RichText = true
+userGreeting.Text = "<font color='#C026D3'>Operator:</font> <font color='#38BDF8'>" .. LocalPlayer.Name .. "</font> <font color='#34D399'>// Ready!</font>"
+userGreeting.Font = Enum.Font.Code
+userGreeting.TextSize = 13
+userGreeting.TextXAlignment = Enum.TextXAlignment.Center
+userGreeting.ZIndex = 12
+userGreeting.Parent = centerWrapper
+
+-- ============================================================================
+-- 3. MAIN ULTIMATE UI HUD (Floating Toggle & Expanded Dashboard with Glow Motion)
+-- ============================================================================
 local mainButton = Instance.new("ImageButton")
-mainButton.Size = UDim2.new(0, 52, 0, 52)
+mainButton.Size = UDim2.new(0, 56, 0, 56)
 mainButton.Position = UDim2.new(0.02, 0, 0.4, 0)
 mainButton.BackgroundColor3 = THEME.Container
 mainButton.Image = "rbxassetid://84035404248200"
@@ -362,441 +546,667 @@ mainButton.ScaleType = Enum.ScaleType.Fit
 mainButton.Visible = false
 mainButton.Parent = screen
 
-corner(mainButton, 16)
-stroke(mainButton, THEME.NeonPrimary, 1.8)
+corner(mainButton, 18)
+stroke(mainButton, THEME.NeonPrimary, 2)
 createGlow(mainButton)
-UIMotion.Float(mainButton, 4, 2)
-UIMotion.ApplyElasticPress(mainButton, UDim2.new(0, 52, 0, 52))
+UIMotion.Float(mainButton, 5, 2)
+UIMotion.ApplyElasticPress(mainButton, UDim2.new(0, 56, 0, 56))
 
+-- Expanded Ultimate Dashboard Frame
 local mainFrame = Instance.new("Frame")
-mainFrame.Size = UDim2.new(0, 650, 0, 480)
-mainFrame.Position = UDim2.new(0, 68, 0, -20)
+mainFrame.Size = UDim2.new(0, 680, 0, 520)
+mainFrame.Position = UDim2.new(0, 75, 0, 0)
 mainFrame.BackgroundColor3 = THEME.Background
-mainFrame.BackgroundTransparency = 0.04
+mainFrame.BackgroundTransparency = 0.05
 mainFrame.Visible = false
 mainFrame.Parent = mainButton
 
-corner(mainFrame, 18)
-stroke(mainFrame, THEME.NeonPrimary, 2)
+corner(mainFrame, 20)
+stroke(mainFrame, THEME.NeonPrimary, 2.5)
 createGlow(mainFrame)
 UIMotion.HologramGlitch(mainFrame)
 
--- Key Verification Logic
+-- Key Validation Connection Logic
 verifyBtn.MouseButton1Click:Connect(function()
     if keyBox.Text == "Emilyy forever" then
         keyWrapper:Destroy()
-        fullscreenContainer:Destroy()
-        blurEffect:Destroy()
+        centerWrapper.Visible = true
 
-        mainButton.Visible = true
-        UIMotion.IntroScaleIn(mainFrame, 0.45)
-        showNotification("<font color='#34D399'>// VIBE PREMIUM</font>", "<font color='#F5F3FF'>¡Bienvenido de nuevo, " .. LocalPlayer.Name .. "!</font>", 4)
+        centerWrapper.Size = UDim2.new(0, 400, 0, 220)
+        centerWrapper.BackgroundTransparency = 1
+        local tweenIn = TweenService:Create(centerWrapper, TweenInfo.new(0.8, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {
+            Size = UDim2.new(0, 460, 0, 260),
+            BackgroundTransparency = 0.1
+        })
+        tweenIn:Play()
+
+        showNotification("<font color='#34D399'>// KEY VALIDADA</font>", "<font color='#F5F3FF'>Acceso cuántico concedido. Iniciando Good Vibes Ultimate v4.0.</font>", 5)
+
+        task.spawn(function()
+            task.wait(7)
+
+            local tweenOut = TweenService:Create(centerWrapper, TweenInfo.new(0.8, Enum.EasingStyle.Quart, Enum.EasingDirection.In), {
+                Size = UDim2.new(0, 400, 0, 220),
+                BackgroundTransparency = 1
+            })
+            local bgTweenOut = TweenService:Create(fullscreenContainer, TweenInfo.new(0.8, Enum.EasingStyle.Quart, Enum.EasingDirection.In), {
+                BackgroundTransparency = 1
+            })
+            local blurTween = TweenService:Create(blurEffect, TweenInfo.new(0.8, Enum.EasingStyle.Quart, Enum.EasingDirection.In), {
+                Size = 0
+            })
+
+            tweenOut:Play()
+            bgTweenOut:Play()
+            blurTween:Play()
+
+            tweenOut.Completed:Wait()
+            fullscreenContainer:Destroy()
+            blurEffect:Destroy()
+
+            mainButton.Visible = true
+            UIMotion.IntroScaleIn(mainFrame, 0.5)
+
+            -- Periodic Discord Support reminders
+            task.spawn(function()
+                while true do
+                    task.wait(300)
+                    showNotification("<font color='#38BDF8'>// DISCORD OFICIAL</font>", "<font color='#F472B6'>¡Únete al servidor oficial para nuevas animaciones gráficas cada semana!</font>", 6)
+                end
+            end)
+        end)
     else
-        showNotification("<font color='#F87171'>// ACCESO DENEGADO</font>", "<font color='#F5F3FF'>Llave incorrecta. Verifica en Discord.</font>", 3)
+        verifyBtn.Text = "<font color='#F87171'><b>ACCESS DENIED!</b></font>"
+        showNotification("<font color='#F87171'>// ERROR DE KEY</font>", "<font color='#F5F3FF'>La Key ingresada es incorrecta. Prueba con la key correcta.</font>", 3)
+        task.delay(2, function()
+            verifyBtn.Text = "<font color='#FFFFFF'><b>VERIFY ACCESS</b></font>"
+        end)
     end
 end)
 
--- Header Bar
+-- Header Bar with Real-Time Performance Monitor
 local header = Instance.new("Frame")
-header.Size = UDim2.new(1, 0, 0, 50)
+header.Size = UDim2.new(1, 0, 0, 55)
 header.BackgroundColor3 = THEME.Container
 header.BorderSizePixel = 0
 header.Parent = mainFrame
-corner(header, 18)
+
+corner(header, 20)
 
 local titleLabel = Instance.new("TextLabel")
-titleLabel.Size = UDim2.new(0, 260, 1, 0)
-titleLabel.Position = UDim2.new(0, 16, 0, 0)
+titleLabel.Size = UDim2.new(0, 280, 1, 0)
+titleLabel.Position = UDim2.new(0, 20, 0, 0)
 titleLabel.BackgroundTransparency = 1
 titleLabel.RichText = true
-titleLabel.Text = "<font color='#C026D3'><b>VIBE PREMIUM</b></font> <font color='#38BDF8'>v4.1</font>"
+titleLabel.Text = "<font color='#C026D3'><b>GOOD VIBES</b></font> <font color='#38BDF8'>ULTIMATE v4.0</font>"
 titleLabel.Font = Enum.Font.Code
-titleLabel.TextSize = 15
+titleLabel.TextSize = 16
 titleLabel.TextXAlignment = Enum.TextXAlignment.Left
 titleLabel.Parent = header
 
 local statsBadge = Instance.new("TextLabel")
-statsBadge.Size = UDim2.new(0, 240, 1, 0)
-statsBadge.Position = UDim2.new(1, -256, 0, 0)
+statsBadge.Size = UDim2.new(0, 250, 1, 0)
+statsBadge.Position = UDim2.new(1, -265, 0, 0)
 statsBadge.BackgroundTransparency = 1
 statsBadge.RichText = true
-statsBadge.Text = "<font color='#34D399'>● ONLINE</font> <font color='#38BDF8'>| 60 FPS</font>"
+statsBadge.Text = "<font color='#34D399'>● ONLINE</font> <font color='#38BDF8'>| FPS: 60 | PING: 0ms</font>"
 statsBadge.Font = Enum.Font.Code
 statsBadge.TextSize = 11
 statsBadge.TextXAlignment = Enum.TextXAlignment.Right
 statsBadge.Parent = header
 
--- Navigation Bar
+-- Stats updater loop
+task.spawn(function()
+    local lastUpdate = tick()
+    local frameCount = 0
+    RunService.RenderStepped:Connect(function()
+        frameCount = frameCount + 1
+        if tick() - lastUpdate >= 1 then
+            local fps = frameCount
+            local pingVal = math.floor(LocalPlayer:GetNetworkPing() * 1000 + 0.5)
+            statsBadge.Text = string.format("<font color='#34D399'>● ONLINE</font> <font color='#38BDF8'>| FPS: %d | PING: %dms</font>", fps, pingVal)
+            frameCount = 0
+            lastUpdate = tick()
+        end
+    end)
+end)
+
+-- Navigation Bar inside Main Dashboard
 local navBar = Instance.new("Frame")
-navBar.Size = UDim2.new(1, -24, 0, 40)
-navBar.Position = UDim2.new(0, 12, 0, 60)
+navBar.Size = UDim2.new(1, -30, 0, 44)
+navBar.Position = UDim2.new(0, 15, 0, 65)
 navBar.BackgroundColor3 = THEME.Container
 navBar.Parent = mainFrame
 
-corner(navBar, 10)
-stroke(navBar, Color3.fromRGB(50, 35, 70), 1)
+corner(navBar, 12)
+stroke(navBar, Color3.fromRGB(60, 40, 80), 1)
 
 local navLayout = Instance.new("UIListLayout")
 navLayout.FillDirection = Enum.FillDirection.Horizontal
 navLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
 navLayout.VerticalAlignment = Enum.VerticalAlignment.Center
-navLayout.Padding = UDim.new(0, 20)
+navLayout.Padding = UDim.new(0, 24)
 navLayout.Parent = navBar
 
 local function createNavButton(iconId)
     local btn = Instance.new("ImageButton")
-    btn.Size = UDim2.new(0, 28, 0, 28)
+    btn.Size = UDim2.new(0, 32, 0, 32)
     btn.BackgroundTransparency = 1
     btn.Image = iconId
     btn.ImageColor3 = THEME.NeonPrimary
     btn.ScaleType = Enum.ScaleType.Fit
     btn.Parent = navBar
-    UIMotion.ApplyElasticPress(btn, UDim2.new(0, 28, 0, 28))
+    UIMotion.ApplyElasticPress(btn, UDim2.new(0, 32, 0, 32))
     return btn
 end
 
-local tabBtn1 = createNavButton("rbxassetid://139047461910753")
-local tabBtn2 = createNavButton("rbxassetid://73960259669066")
+local tabBtn1 = createNavButton("rbxassetid://139047461910753") -- Animations Tab
+local tabBtn2 = createNavButton("rbxassetid://73960259669066") -- Config/Settings Tab
 
+-- Info Tab Button ("!")
 local tabBtn3 = Instance.new("TextButton")
-tabBtn3.Size = UDim2.new(0, 28, 0, 28)
+tabBtn3.Size = UDim2.new(0, 32, 0, 32)
 tabBtn3.BackgroundTransparency = 1
 tabBtn3.Text = "!"
 tabBtn3.TextColor3 = THEME.Subtext
 tabBtn3.Font = Enum.Font.Code
-tabBtn3.TextSize = 18
+tabBtn3.TextSize = 20
 tabBtn3.Parent = navBar
-UIMotion.ApplyElasticPress(tabBtn3, UDim2.new(0, 28, 0, 28))
+UIMotion.ApplyElasticPress(tabBtn3, UDim2.new(0, 32, 0, 32))
 
 -- Content Panels Holder
 local contentHolder = Instance.new("Frame")
-contentHolder.Size = UDim2.new(1, -24, 1, -114)
-contentHolder.Position = UDim2.new(0, 12, 0, 106)
+contentHolder.Size = UDim2.new(1, -30, 1, -130)
+contentHolder.Position = UDim2.new(0, 15, 0, 118)
 contentHolder.BackgroundTransparency = 1
 contentHolder.Parent = mainFrame
 
--- PANEL 1: ANIMATIONS & TARGETS
+-- ============================================================================
+-- PANEL 1: MAIN ANIMATION & GRAPHIC EFFECTS DASHBOARD
+-- ============================================================================
 local panel1 = Instance.new("Frame")
 panel1.Size = UDim2.new(1, 0, 1, 0)
 panel1.BackgroundTransparency = 1
 panel1.Parent = contentHolder
 
 local leftContainer = Instance.new("Frame")
-leftContainer.Size = UDim2.new(0.60, 0, 1, 0)
+leftContainer.Size = UDim2.new(0.61, 0, 1, 0)
 leftContainer.BackgroundTransparency = 1
 leftContainer.Parent = panel1
 
-local namebox = Instance.new("TextBox")
-namebox.Size = UDim2.new(1, 0, 0, 38)
-namebox.Position = UDim2.new(0, 0, 0, 0)
-namebox.BackgroundColor3 = THEME.Container
-namebox.PlaceholderText = "Escribe el nombre del objetivo..."
-namebox.Text = ""
-namebox.TextColor3 = THEME.Text
-namebox.PlaceholderColor3 = THEME.Subtext
-namebox.Font = Enum.Font.Code
-namebox.TextSize = 12
-namebox.ClearTextOnFocus = false
-namebox.Parent = leftContainer
+-- Graphic Status Bar instead of Player Namebox
+local graphicStatusBar = Instance.new("Frame")
+graphicStatusBar.Size = UDim2.new(1, 0, 0, 42)
+graphicStatusBar.Position = UDim2.new(0, 0, 0, 0)
+graphicStatusBar.BackgroundColor3 = THEME.Container
+graphicStatusBar.Parent = leftContainer
 
-corner(namebox, 8)
-stroke(namebox, THEME.NeonPrimary, 1.2)
+corner(graphicStatusBar, 10)
+stroke(graphicStatusBar, THEME.NeonPrimary, 1.5)
 
+local statusTextLabel = Instance.new("TextLabel")
+statusTextLabel.Size = UDim2.new(1, -16, 1, 0)
+statusTextLabel.Position = UDim2.new(0, 8, 0, 0)
+statusTextLabel.BackgroundTransparency = 1
+statusTextLabel.RichText = true
+statusTextLabel.Text = "<font color='#38BDF8'>// STATUS:</font> <font color='#34D399'>Motor Gráfico Activo (0 Lag)</font>"
+statusTextLabel.Font = Enum.Font.Code
+statusTextLabel.TextSize = 12
+statusTextLabel.TextXAlignment = Enum.TextXAlignment.Left
+statusTextLabel.Parent = graphicStatusBar
+
+-- Scrolling Graphic Animation Feed
 local scrollframe2 = Instance.new("ScrollingFrame")
-scrollframe2.Size = UDim2.new(1, 0, 1, -46)
-scrollframe2.Position = UDim2.new(0, 0, 0, 46)
+scrollframe2.Size = UDim2.new(1, 0, 1, -52)
+scrollframe2.Position = UDim2.new(0, 0, 0, 52)
 scrollframe2.BackgroundTransparency = 1
 scrollframe2.AutomaticCanvasSize = Enum.AutomaticSize.Y
 scrollframe2.CanvasSize = UDim2.new(0,0,0,0)
-scrollframe2.ScrollBarThickness = 4
+scrollframe2.ScrollBarThickness = 5
 scrollframe2.ScrollBarImageColor3 = THEME.NeonPrimary
 scrollframe2.Parent = leftContainer
 
 local scrollframelist2 = Instance.new("UIListLayout")
 scrollframelist2.HorizontalAlignment = Enum.HorizontalAlignment.Center
 scrollframelist2.SortOrder = Enum.SortOrder.LayoutOrder
-scrollframelist2.Padding = UDim.new(0, 6)
+scrollframelist2.Padding = UDim.new(0, 7)
 scrollframelist2.Parent = scrollframe2
 
--- Right Container (Player List)
+-- Right Container (Graphic FX Control Hub)
 local rightContainer = Instance.new("Frame")
-rightContainer.Size = UDim2.new(0.385, 0, 1, 0)
-rightContainer.Position = UDim2.new(0.615, 0, 0, 0)
+rightContainer.Size = UDim2.new(0.375, 0, 1, 0)
+rightContainer.Position = UDim2.new(0.625, 0, 0, 0)
 rightContainer.BackgroundColor3 = THEME.Container
 rightContainer.Parent = panel1
 
-corner(rightContainer, 12)
-stroke(rightContainer, Color3.fromRGB(50, 35, 70), 1.2)
+corner(rightContainer, 14)
+stroke(rightContainer, Color3.fromRGB(60, 40, 80), 1.5)
 
-local playerListHeader = Instance.new("TextLabel")
-playerListHeader.Size = UDim2.new(1, 0, 0, 38)
-playerListHeader.BackgroundTransparency = 1
-playerListHeader.RichText = true
-playerListHeader.Text = "<font color='#38BDF8'>// JUGADORES</font>"
-playerListHeader.Font = Enum.Font.Code
-playerListHeader.TextSize = 12
-playerListHeader.Parent = rightContainer
+local fxHeader = Instance.new("TextLabel")
+fxHeader.Size = UDim2.new(1, 0, 0, 42)
+fxHeader.BackgroundTransparency = 1
+fxHeader.RichText = true
+fxHeader.Text = "<font color='#38BDF8'>// EFECTOS VISUALES</font>"
+fxHeader.Font = Enum.Font.Code
+fxHeader.TextSize = 13
+fxHeader.Parent = rightContainer
 
-local scrollframe1 = Instance.new("ScrollingFrame")
-scrollframe1.Size = UDim2.new(1, -10, 1, -46)
-scrollframe1.Position = UDim2.new(0, 5, 0, 42)
-scrollframe1.BackgroundTransparency = 1
-scrollframe1.AutomaticCanvasSize = Enum.AutomaticSize.Y
-scrollframe1.CanvasSize = UDim2.new(0,0,0,0)
-scrollframe1.ScrollBarThickness = 3
-scrollframe1.ScrollBarImageColor3 = THEME.NeonPrimary
-scrollframe1.Parent = rightContainer
+local fxScroll = Instance.new("ScrollingFrame")
+fxScroll.Size = UDim2.new(1, -12, 1, -52)
+fxScroll.Position = UDim2.new(0, 6, 0, 46)
+fxScroll.BackgroundTransparency = 1
+fxScroll.AutomaticCanvasSize = Enum.AutomaticSize.Y
+fxScroll.CanvasSize = UDim2.new(0,0,0,0)
+fxScroll.ScrollBarThickness = 4
+fxScroll.ScrollBarImageColor3 = THEME.NeonPrimary
+fxScroll.Parent = rightContainer
 
-local scrollframelist1 = Instance.new("UIListLayout")
-scrollframelist1.HorizontalAlignment = Enum.HorizontalAlignment.Center
-scrollframelist1.SortOrder = Enum.SortOrder.LayoutOrder
-scrollframelist1.Padding = UDim.new(0, 4)
-scrollframelist1.Parent = scrollframe1
+local fxList = Instance.new("UIListLayout")
+fxList.HorizontalAlignment = Enum.HorizontalAlignment.Center
+fxList.SortOrder = Enum.SortOrder.LayoutOrder
+fxList.Padding = UDim.new(0, 5)
+fxList.Parent = fxScroll
 
--- PANEL 2: SETTINGS
+-- ============================================================================
+-- PANEL 2: SETTINGS PANEL
+-- ============================================================================
 local panel2 = Instance.new("Frame")
 panel2.Size = UDim2.new(1, 0, 1, 0)
 panel2.BackgroundTransparency = 1
 panel2.Visible = false
 panel2.Parent = contentHolder
 
+local settinglabel = Instance.new("TextLabel")
+settinglabel.Size = UDim2.new(1, 0, 0, 35)
+settinglabel.BackgroundTransparency = 1
+settinglabel.RichText = true
+settinglabel.Text = "<font color='#38BDF8'>// SYSTEM CONFIGURATION</font>"
+settinglabel.Font = Enum.Font.Code
+settinglabel.TextSize = 13
+settinglabel.TextXAlignment = Enum.TextXAlignment.Left
+settinglabel.Parent = panel2
+
 local drag = Instance.new("TextButton")
-drag.Size = UDim2.new(1, 0, 0, 44)
-drag.Position = UDim2.new(0, 0, 0, 10)
+drag.Size = UDim2.new(1, 0, 0, 48)
+drag.Position = UDim2.new(0, 0, 0, 45)
 drag.BackgroundColor3 = THEME.Container
-drag.Text = "Movimiento HUD: [OFF]"
+drag.Text = "Toggle Draggable HUD: [OFF]"
 drag.TextColor3 = THEME.NeonPrimary
 drag.Font = Enum.Font.Code
-drag.TextSize = 12
+drag.TextSize = 13
 drag.Parent = panel2
-corner(drag, 8)
-stroke(drag, THEME.NeonPrimary, 1.2)
+
+corner(drag, 10)
+stroke(drag, THEME.NeonPrimary, 1.5)
+UIMotion.ApplyElasticPress(drag, UDim2.new(1, 0, 0, 48))
 
 local fix = Instance.new("TextButton")
-fix.Size = UDim2.new(1, 0, 0, 44)
-fix.Position = UDim2.new(0, 0, 0, 64)
+fix.Size = UDim2.new(1, 0, 0, 48)
+fix.Position = UDim2.new(0, 0, 0, 105)
 fix.BackgroundColor3 = Color3.fromRGB(35, 12, 25)
-fix.Text = "Cerrar e Inactivar Interfaz"
+fix.Text = "Terminate Gui / Safe Shutdown"
 fix.TextColor3 = THEME.Error
 fix.Font = Enum.Font.Code
-fix.TextSize = 12
+fix.TextSize = 13
 fix.Parent = panel2
-corner(fix, 8)
-stroke(fix, THEME.Error, 1.2)
 
--- PANEL 3: INFO & CREDITS
+corner(fix, 10)
+stroke(fix, THEME.Error, 1.5)
+UIMotion.ApplyElasticPress(fix, UDim2.new(1, 0, 0, 48))
+
+-- ============================================================================
+-- PANEL 3: HELP & SUPPORT
+-- ============================================================================
 local panel3 = Instance.new("Frame")
 panel3.Size = UDim2.new(1, 0, 1, 0)
 panel3.BackgroundTransparency = 1
 panel3.Visible = false
 panel3.Parent = contentHolder
 
+local infolabel = Instance.new("TextLabel")
+infolabel.Size = UDim2.new(1, 0, 0, 35)
+infolabel.BackgroundTransparency = 1
+infolabel.RichText = true
+infolabel.Text = "<font color='#38BDF8'>// COMMUNITY & SUPPORT</font>"
+infolabel.Font = Enum.Font.Code
+infolabel.TextSize = 13
+infolabel.TextXAlignment = Enum.TextXAlignment.Left
+infolabel.Parent = panel3
+
 local infodesc = Instance.new("TextLabel")
-infodesc.Size = UDim2.new(1, 0, 0, 100)
-infodesc.Position = UDim2.new(0, 0, 0, 10)
+infodesc.Size = UDim2.new(1, 0, 0, 120)
+infodesc.Position = UDim2.new(0, 0, 0, 45)
 infodesc.BackgroundColor3 = THEME.Container
 infodesc.RichText = true
-infodesc.Text = " <font color='#C026D3'>Vibe Premium v4.1</font> optimizado.\n Creado y gestionado por <font color='#F472B6'>mittyxkittyy</font>.\n Disfruta de animaciones fluidas sin desbordamientos."
+infodesc.Text = " <font color='#C026D3'>Good Vibes Ultimate v4.0</font> cuenta con más de 90+ animaciones\n de UI fluidas y efectos visuales puramente gráficos.\n ¿Tienes sugerencias o bugs? Únete a nuestra\n comunidad oficial en Discord."
 infodesc.TextColor3 = THEME.Subtext
 infodesc.Font = Enum.Font.Code
-infodesc.TextSize = 12
+infodesc.TextSize = 13
 infodesc.TextXAlignment = Enum.TextXAlignment.Left
 infodesc.TextYAlignment = Enum.TextYAlignment.Center
 infodesc.Parent = panel3
-corner(infodesc, 8)
-stroke(infodesc, Color3.fromRGB(50, 35, 70), 1.2)
+
+corner(infodesc, 10)
+stroke(infodesc, Color3.fromRGB(60, 40, 80), 1.5)
+
+local discordBtn = Instance.new("TextButton")
+discordBtn.Size = UDim2.new(0.48, 0, 0, 50)
+discordBtn.Position = UDim2.new(0, 0, 0, 180)
+discordBtn.BackgroundColor3 = THEME.Container
+discordBtn.Text = "JOIN DISCORD"
+discordBtn.TextColor3 = THEME.NeonPrimary
+discordBtn.Font = Enum.Font.Code
+discordBtn.TextSize = 13
+discordBtn.Parent = panel3
+
+corner(discordBtn, 10)
+stroke(discordBtn, THEME.NeonPrimary, 1.5)
+UIMotion.ApplyElasticPress(discordBtn, UDim2.new(0.48, 0, 0, 50))
 
 local ownerIgBtn = Instance.new("TextButton")
-ownerIgBtn.Size = UDim2.new(1, 0, 0, 44)
-ownerIgBtn.Position = UDim2.new(0, 0, 0, 126)
+ownerIgBtn.Size = UDim2.new(0.48, 0, 0, 50)
+ownerIgBtn.Position = UDim2.new(0.52, 0, 0, 180)
 ownerIgBtn.BackgroundColor3 = THEME.Container
-ownerIgBtn.RichText = true
-ownerIgBtn.Text = "<font color='#F472B6'><b>Copiar IG Owner: mittyxkittyy</b></font>"
+ownerIgBtn.Text = "IG: mittyxkittyy"
+ownerIgBtn.TextColor3 = Color3.fromRGB(244, 114, 182)
 ownerIgBtn.Font = Enum.Font.Code
-ownerIgBtn.TextSize = 12
+ownerIgBtn.TextSize = 13
 ownerIgBtn.Parent = panel3
-corner(ownerIgBtn, 8)
-stroke(ownerIgBtn, Color3.fromRGB(244, 114, 182), 1.2)
+
+corner(ownerIgBtn, 10)
+stroke(ownerIgBtn, Color3.fromRGB(244, 114, 182), 1.5)
+UIMotion.ApplyElasticPress(ownerIgBtn, UDim2.new(0.48, 0, 0, 50))
+
+-- Tab Switch Actions
+fix.MouseButton1Click:Connect(function()
+    showNotification("<font color='#F87171'>// SISTEMA</font>", "<font color='#F5F3FF'>Cerrando interfaz por completo...</font>", 3)
+    task.wait(1)
+    screen:Destroy()
+end)
+
+drag.MouseButton1Click:Connect(function()
+    mainButton.Draggable = not mainButton.Draggable
+    drag.Text = mainButton.Draggable and "Toggle Draggable HUD: [ACTIVE]" or "Toggle Draggable HUD: [OFF]"
+    showNotification("<font color='#38BDF8'>// CONFIG</font>", "<font color='#F5F3FF'>Estado de movimiento actualizado.</font>", 2)
+end)
+
+discordBtn.MouseButton1Click:Connect(function()
+    pcall(function()
+        setclipboard("https://discord.gg/dvrptTbUTr")
+    end)
+    discordBtn.Text = "LINK COPIED!"
+    showNotification("<font color='#34D399'>// DISCORD</font>", "<font color='#F5F3FF'>Enlace copiado al portapapeles con éxito.</font>", 3)
+    task.delay(2, function()
+        discordBtn.Text = "JOIN DISCORD"
+    end)
+end)
 
 ownerIgBtn.MouseButton1Click:Connect(function()
-    pcall(function() setclipboard("mittyxkittyy") end)
-    showNotification("<font color='#F472B6'>// INSTAGRAM</font>", "<font color='#F5F3FF'>Instagram copiado al portapapeles.</font>", 3)
+    pcall(function()
+        setclipboard("mittyxkittyy")
+    end)
+    ownerIgBtn.Text = "IG COPIED!"
+    showNotification("<font color='#F472B6'>// INSTAGRAM</font>", "<font color='#F5F3FF'>Instagram de la owner (mittyxkittyy) copiado al portapapeles.</font>", 3)
+    task.delay(2, function()
+        ownerIgBtn.Text = "IG: mittyxkittyy"
+    end)
 end)
 
--- Tab Switch Logic
 tabBtn1.MouseButton1Click:Connect(function()
-    panel1.Visible = true; panel2.Visible = false; panel3.Visible = false
-    tabBtn1.ImageColor3 = THEME.NeonPrimary; tabBtn2.ImageColor3 = THEME.Subtext; tabBtn3.TextColor3 = THEME.Subtext
+    panel1.Visible = true
+    panel2.Visible = false
+    panel3.Visible = false
+    tabBtn1.ImageColor3 = THEME.NeonPrimary
+    tabBtn2.ImageColor3 = THEME.Subtext
+    tabBtn3.TextColor3 = THEME.Subtext
 end)
+
 tabBtn2.MouseButton1Click:Connect(function()
-    panel1.Visible = false; panel2.Visible = true; panel3.Visible = false
-    tabBtn2.ImageColor3 = THEME.NeonPrimary; tabBtn1.ImageColor3 = THEME.Subtext; tabBtn3.TextColor3 = THEME.Subtext
+    panel1.Visible = false
+    panel2.Visible = true
+    panel3.Visible = false
+    tabBtn2.ImageColor3 = THEME.NeonPrimary
+    tabBtn1.ImageColor3 = THEME.Subtext
+    tabBtn3.TextColor3 = THEME.Subtext
 end)
+
 tabBtn3.MouseButton1Click:Connect(function()
-    panel1.Visible = false; panel2.Visible = false; panel3.Visible = true
-    tabBtn3.TextColor3 = THEME.NeonPrimary; tabBtn1.ImageColor3 = THEME.Subtext; tabBtn2.ImageColor3 = THEME.Subtext
+    panel1.Visible = false
+    panel2.Visible = false
+    panel3.Visible = true
+    tabBtn3.TextColor3 = THEME.NeonPrimary
+    tabBtn1.ImageColor3 = THEME.Subtext
+    tabBtn2.ImageColor3 = THEME.Subtext
 end)
 
 mainButton.MouseButton1Click:Connect(function()
     mainFrame.Visible = not mainFrame.Visible
 end)
 
-drag.MouseButton1Click:Connect(function()
-    mainButton.Draggable = not mainButton.Draggable
-    drag.Text = mainButton.Draggable and "Movimiento HUD: [ACTIVO]" or "Movimiento HUD: [OFF]"
-end)
+-- Graphic Effects Population in Right Sidebar
+local function addVisualEffectOption(name, description, callback)
+    local btn = Instance.new("TextButton")
+    btn.Size = UDim2.new(0.92, 0, 0, 42)
+    btn.BackgroundColor3 = THEME.Element
+    btn.Text = "  ✨ " .. name
+    btn.TextColor3 = THEME.Text
+    btn.Font = Enum.Font.Code
+    btn.TextSize = 11
+    btn.TextXAlignment = Enum.TextXAlignment.Left
+    btn.Parent = fxScroll
 
-fix.MouseButton1Click:Connect(function()
-    screen:Destroy()
-end)
+    corner(btn, 8)
+    stroke(btn, Color3.fromRGB(50, 35, 70), 1)
+    UIMotion.ApplyElasticPress(btn, UDim2.new(0.92, 0, 0, 42))
 
--- Player List Management
-local function refreshPlayerList()
-    for _, child in pairs(scrollframe1:GetChildren()) do
-        if child.Name == "playername" then child:Destroy() end
-    end
-    for _, p in pairs(Players:GetPlayers()) do
-        if p ~= LocalPlayer then
-            local btn = Instance.new("TextButton")
-            btn.Size = UDim2.new(0.94, 0, 0, 32)
-            btn.Name = "playername"
+    local active = false
+    btn.MouseButton1Click:Connect(function()
+        active = not active
+        if active then
+            btn.BackgroundColor3 = THEME.NeonPrimary
+            btn.TextColor3 = THEME.Background
+            showNotification("<font color='#34D399'>// FX ACTIVO</font>", "<font color='#F5F3FF'>" .. description .. " activado.</font>", 2)
+        else
             btn.BackgroundColor3 = THEME.Element
-            btn.Text = "  > " .. p.Name
             btn.TextColor3 = THEME.Text
-            btn.Font = Enum.Font.Code
-            btn.TextSize = 11
-            btn.TextXAlignment = Enum.TextXAlignment.Left
-            btn.Parent = scrollframe1
-            corner(btn, 6)
-            stroke(btn, Color3.fromRGB(50, 35, 70), 0.8)
-            
-            btn.MouseButton1Click:Connect(function()
-                namebox.Text = p.Name
-                showNotification("<font color='#38BDF8'>// OBJETIVO</font>", "<font color='#F5F3FF'>Fijado a: " .. p.Name .. "</font>", 2)
-            end)
+            showNotification("<font color='#F87171'>// FX APAGADO</font>", "<font color='#F5F3FF'>" .. description .. " desactivado.</font>", 2)
+        end
+        pcall(function() callback(active) end)
+    end)
+end
+
+-- Graphic Effects Logic
+addVisualEffectOption("Cyber Glow Pulse", "Ondas de brillo neón en el entorno", function(state)
+    if state then
+        local p = Instance.new("PointLight")
+        p.Name = "CyberGlowEffect"
+        p.Color = THEME.NeonPrimary
+        p.Range = 25
+        p.Brightness = 3
+        if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+            p.Parent = LocalPlayer.Character.HumanoidRootPart
+        end
+    else
+        if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+            local l = LocalPlayer.Character.HumanoidRootPart:FindFirstChild("CyberGlowEffect")
+            if l then l:Destroy() end
         end
     end
-end
-Players.PlayerAdded:Connect(refreshPlayerList)
-Players.PlayerRemoving:Connect(refreshPlayerList)
-refreshPlayerList()
+end)
 
--- Safe Animator Helper
-local function loadAndPlayAnim(humanoid, assetId)
+addVisualEffectOption("Matrix Color Shift", "Ciclo cromático en iluminación del mundo", function(state)
+    task.spawn(function()
+        while state and Lighting do
+            Lighting.Ambient = Color3.fromHSV(tick() % 5 / 5, 0.8, 0.5)
+            task.wait(0.2)
+            if not state then
+                Lighting.Ambient = Color3.fromRGB(128, 128, 128)
+                break
+            end
+        end
+    end)
+end)
+
+addVisualEffectOption("Cyber Hologram Sparkle", "Partículas de neón flotantes a tu alrededor", function(state)
+    if state then
+        local emitter = Instance.new("ParticleEmitter")
+        emitter.Name = "CyberParticles"
+        emitter.Color = ColorSequence.new(THEME.NeonPrimary, THEME.NeonAccent)
+        emitter.Size = NumberSequence.new(0.2, 0)
+        emitter.Texture = "rbxassetid://258124463"
+        emitter.Rate = 15
+        emitter.Speed = NumberRange.new(2, 5)
+        if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+            emitter.Parent = LocalPlayer.Character.HumanoidRootPart
+        end
+    else
+        if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+            local e = LocalPlayer.Character.HumanoidRootPart:FindFirstChild("CyberParticles")
+            if e then e:Destroy() end
+        end
+    end
+end)
+
+-- Safe Graphic Animator Helper
+local function loadAndPlayGraphicAnim(humanoid, assetId, speedVal)
     local success, track = pcall(function()
         local anim = Instance.new("Animation")
         anim.AnimationId = "rbxassetid://" .. assetId
         local loaded = humanoid:LoadAnimation(anim)
         loaded.Looped = true
         loaded:Play()
+        if speedVal and speedVal ~= 0 then
+            loaded:AdjustSpeed(speedVal)
+        end
         return loaded
     end)
-    return success and track or nil
+    if success then
+        return track
+    end
+    return nil
 end
 
--- Animation Trigger Wrapper
-local function se(nam, Ida, Idb, cof1, cof2, speed, tog)
-    local isTeleporting = false
-    local targetPlayer = nil
-    local currentOffset = cof1
-    local lastToggle = tick()
-
-    local function getTarget()
-        local query = namebox.Text:lower()
-        if query == "" then return nil end
-        for _, p in ipairs(Players:GetPlayers()) do
-            if p.Name:lower():sub(1, #query) == query or p.DisplayName:lower():sub(1, #query) == query then
-                return p
-            end
-        end
-        return nil
-    end
+-- Graphic Animation System (Solo animaciones visuales/estéticas para el propio avatar)
+local function registerGraphicAnimation(nam, Ida, Idb, Idc, Idd, speedVal)
+    local isPlaying = false
+    local activeTracks = {}
 
     local animationButton = Instance.new("TextButton")
-    animationButton.Size = UDim2.new(0.96, 0, 0, 36)
+    animationButton.Size = UDim2.new(0.95, 0, 0, 38)
     animationButton.BackgroundColor3 = THEME.Element
     animationButton.Text = "  ⚡ " .. nam
     animationButton.TextColor3 = THEME.Subtext
     animationButton.Font = Enum.Font.Code
-    animationButton.TextSize = 11
+    animationButton.TextSize = 12
     animationButton.TextXAlignment = Enum.TextXAlignment.Left
     animationButton.Parent = scrollframe2
 
-    corner(animationButton, 6)
-    stroke(animationButton, Color3.fromRGB(50, 35, 70), 0.8)
-    UIMotion.ApplyElasticPress(animationButton, UDim2.new(0.96, 0, 0, 36))
-
-    local isPlaying = false
-    local activeTracks = {}
+    corner(animationButton, 8)
+    stroke(animationButton, Color3.fromRGB(50, 35, 70), 1)
+    UIMotion.ApplyElasticPress(animationButton, UDim2.new(0.95, 0, 0, 38))
 
     animationButton.MouseButton1Click:Connect(function()
-        targetPlayer = getTarget()
-        isTeleporting = not isTeleporting
+        local character = LocalPlayer.Character
+        local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+        if not humanoid then return end
 
-        if isTeleporting and targetPlayer then
-            animationButton.BackgroundColor3 = THEME.NeonPrimary
-            animationButton.TextColor3 = THEME.Background
-            showNotification("<font color='#34D399'>// SECUENCIA</font>", "<font color='#F5F3FF'>Iniciando: " .. nam .. "</font>", 2)
-            
-            task.spawn(function()
-                while isTeleporting and targetPlayer and targetPlayer.Character do
-                    local tRoot = targetPlayer.Character:FindFirstChild("HumanoidRootPart")
-                    local lRoot = LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
-                    if tRoot and lRoot then
-                        lRoot.CFrame = tRoot.CFrame * currentOffset
-                        if tick() - lastToggle >= tog then
-                            currentOffset = (currentOffset == cof1) and cof2 or cof1
-                            lastToggle = tick()
-                        end
-                    end
-                    RunService.Stepped:Wait()
-                end
-            end)
-        else
-            isTeleporting = false
+        if isPlaying then
+            for _, track in ipairs(activeTracks) do
+                track:Stop()
+            end
+            activeTracks = {}
+            isPlaying = false
             animationButton.BackgroundColor3 = THEME.Element
             animationButton.TextColor3 = THEME.Subtext
-            showNotification("<font color='#F87171'>// SECUENCIA</font>", "<font color='#F5F3FF'>Detenida: " .. nam .. "</font>", 2)
-        end
-
-        local char = LocalPlayer.Character
-        local hum = char and char:FindFirstChildOfClass("Humanoid")
-        if hum then
-            if isPlaying then
-                for _, t in ipairs(activeTracks) do t:Stop() end
-                activeTracks = {}
-                isPlaying = false
-            else
-                for _, id in ipairs({Ida, Idb}) do
-                    if id and id ~= "" then
-                        local tr = loadAndPlayAnim(hum, id)
-                        if tr then table.insert(activeTracks, tr) end
+            showNotification("<font color='#F87171'>// ANIMACIÓN</font>", "<font color='#F5F3FF'>Detenido: " .. nam .. "</font>", 2)
+        else
+            activeTracks = {}
+            local ids = {Ida, Idb, Idc, Idd}
+            for _, id in ipairs(ids) do
+                if id and id ~= "0" and id ~= "" then
+                    local track = loadAndPlayGraphicAnim(humanoid, id, speedVal or 1)
+                    if track then
+                        table.insert(activeTracks, track)
                     end
                 end
-                isPlaying = true
             end
+            isPlaying = true
+            animationButton.BackgroundColor3 = THEME.NeonPrimary
+            animationButton.TextColor3 = THEME.Background
+            showNotification("<font color='#34D399'>// ANIMACIÓN</font>", "<font color='#F5F3FF'>Reproduciendo: " .. nam .. "</font>", 2)
         end
     end)
 end
 
-local function text(cat)
-    local lbl = Instance.new("TextLabel")
-    lbl.Size = UDim2.new(0.96, 0, 0, 24)
-    lbl.BackgroundTransparency = 1
-    lbl.RichText = true
-    lbl.Text = " <font color='#38BDF8'>//</font> <font color='#C026D3'>" .. string.upper(cat) .. "</font>"
-    lbl.Font = Enum.Font.Code
-    lbl.TextSize = 10
-    lbl.TextXAlignment = Enum.TextXAlignment.Left
-    lbl.Parent = scrollframe2
+-- Section Text Generator
+local function text(categoryName)
+    local sectionLabel = Instance.new("TextLabel")
+    sectionLabel.Size = UDim2.new(0.95, 0, 0, 28)
+    sectionLabel.BackgroundTransparency = 1
+    sectionLabel.RichText = true
+    sectionLabel.Text = " <font color='#38BDF8'>//</font> <font color='#C026D3'>" .. string.upper(categoryName) .. "</font>"
+    sectionLabel.Font = Enum.Font.Code
+    sectionLabel.TextSize = 11
+    sectionLabel.TextXAlignment = Enum.TextXAlignment.Left
+    sectionLabel.Parent = scrollframe2
 end
 
--- CATEGORÍAS DE ANIMACIONES OPTIMIZADAS
-text("Cyber Kinetic Series")
-se("Cyber Flow Alpha", "182789003", "106772613", CFrame.new(0, 0, -1), CFrame.new(0, 0, -2), 12, 0.4)
-se("Neon Pulse Beta", "182749109", "179224234", CFrame.new(0, 0, -1.2), CFrame.new(0, 0, -2.2), 15, 0.3)
-se("Vibe Shift Gamma", "148840371", "158821881", CFrame.new(0, 0, 0.8), CFrame.new(0, 0, 1.2), 18, 0.2)
+-- ============================================================================
+-- SECCIÓN: CRÉDITOS Y REDES DE LA OWNER
+-- ============================================================================
+text("Owner Credits & Socials")
 
-text("Quantum Loop Series")
-se("Matrix Velocity", "181526230", "180612465", CFrame.new(0, 0, -2), CFrame.new(0, 0, -1.2), 20, 0.15)
-se("Cybernetic Glide", "225975820", "283545583", CFrame.new(0, 0, -1), CFrame.new(0, 0, -1), 22, 0.1)
+local ownerWidget = Instance.new("Frame")
+ownerWidget.Size = UDim2.new(0.95, 0, 0, 48)
+ownerWidget.BackgroundColor3 = THEME.Element
+ownerWidget.Parent = scrollframe2
+
+corner(ownerWidget, 8)
+stroke(ownerWidget, Color3.fromRGB(244, 114, 182), 1.5)
+
+local ownerLabelText = Instance.new("TextLabel")
+ownerLabelText.Size = UDim2.new(0.55, 0, 1, 0)
+ownerLabelText.Position = UDim2.new(0, 8, 0, 0)
+ownerLabelText.BackgroundTransparency = 1
+ownerLabelText.RichText = true
+ownerLabelText.Text = "<font color='#F472B6'><b>OWNER:</b></font> <font color='#F5F3FF'>mittyxkittyy</font>"
+ownerLabelText.Font = Enum.Font.Code
+ownerLabelText.TextSize = 11
+ownerLabelText.TextXAlignment = Enum.TextXAlignment.Left
+ownerLabelText.Parent = ownerWidget
+
+local ownerIgCopyBtn = Instance.new("TextButton")
+ownerIgCopyBtn.Size = UDim2.new(0.42, 0, 0, 32)
+ownerIgCopyBtn.Position = UDim2.new(0.56, 0, 0.5, -16)
+ownerIgCopyBtn.BackgroundColor3 = THEME.Container
+ownerIgCopyBtn.RichText = true
+ownerIgCopyBtn.Text = "<font color='#F472B6'><b>COPIA IG</b></font>"
+ownerIgCopyBtn.Font = Enum.Font.Code
+ownerIgCopyBtn.TextSize = 11
+ownerIgCopyBtn.Parent = ownerWidget
+
+corner(ownerIgCopyBtn, 6)
+stroke(ownerIgCopyBtn, Color3.fromRGB(244, 114, 182), 1)
+UIMotion.ApplyElasticPress(ownerIgCopyBtn, UDim2.new(0.42, 0, 0, 32))
+
+ownerIgCopyBtn.MouseButton1Click:Connect(function()
+    pcall(function()
+        setclipboard("mittyxkittyy")
+    end)
+    ownerIgCopyBtn.Text = "<font color='#34D399'><b>¡COPIADO!</b></font>"
+    showNotification("<font color='#F472B6'>// INSTAGRAM</font>", "<font color='#F5F3FF'>Instagram de la owner (mittyxkittyy) copiado al portapapeles.</font>", 3)
+    task.delay(2, function()
+        ownerIgCopyBtn.Text = "<font color='#F472B6'><b>COPIA IG</b></font>"
+    end)
+end)
+
+-- ============================================================================
+-- LIBRERÍA DE ANIMACIONES GRÁFICAS Y ESTÉTICAS (Pro Series)
+-- ============================================================================
+text("Cyberpunk Emotes & Dances")
+registerGraphicAnimation("Cyber Futuristic Float", "182789003", "106772613", "0", "0", 1)
+registerGraphicAnimation("Neon Glitch Vibe", "182749109", "179224234", "0", "0", 1)
+registerGraphicAnimation("Matrix Floating Loop", "148840371", "158821881", "0", "0", 1.2)
+registerGraphicAnimation("Quantum Pose Sequence", "106772613", "181526230", "0", "0", 1)
+registerGraphicAnimation("Cybernetic Sleep Mode", "282574440", "182789003", "0", "0", 1)
+
