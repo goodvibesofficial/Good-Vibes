@@ -1,12 +1,13 @@
 --[[
 ================================================================================
-    PROJECT: Good Vibes - Cyberpunk Violet Ultimate Edition (Ultra Modern v3.0)
+    PROJECT: Good Vibes - Cyberpunk Violet Ultimate Edition (Ultra Modern v3.1)
     Features: 
     - Futuristic Glassmorphism HUD & Neon Flow
     - Modern Key System with Hardware ID (HWID) Simulation & Status Badges
     - Massive Expanded Animation Library (Over 40+ Unique High-Performance Loops)
     - Real-time Performance Monitor, Interactive Tabs, & Cyberpunk Sound/Visual FX
-    - Dynamic Glow Motion & Pulsing UI Border Animations
+    - Owner Integration: Instagram (@mittyxktty) & Sensual Notification Prompts
+    - Enhanced Action Notifications & R6/R15 Architecture Compatibility Warnings
 ================================================================================
 ]]
 
@@ -75,7 +76,6 @@ local function createGlow(parent)
     glow.ZIndex = parent.ZIndex - 1
     glow.Parent = parent
     
-    -- Continuous Glow Motion / Pulsing Animation Loop
     task.spawn(function()
         while glow and glow.Parent do
             local tween1 = TweenService:Create(glow, TweenInfo.new(2, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {
@@ -94,7 +94,6 @@ local function createGlow(parent)
         end
     end)
     
-    -- Dynamic Neon Color Shifting for Borders / Strokes
     task.spawn(function()
         local uiStroke = parent:FindFirstChild("DynamicStroke", true)
         while uiStroke and uiStroke.Parent do
@@ -141,7 +140,6 @@ local function showNotification(title, message, duration)
         corner(card, 14)
         stroke(card, THEME.NeonPrimary, 1.5)
 
-        -- Side indicator line with Glow Motion
         local indicator = Instance.new("Frame")
         indicator.Size = UDim2.new(0, 4, 1, -16)
         indicator.Position = UDim2.new(0, 8, 0, 8)
@@ -218,7 +216,7 @@ fullscreenContainer.ZIndex = 10
 fullscreenContainer.Parent = screen
 
 -- ============================================================================
--- 1. ULTRA MODERN SECURE KEY SYSTEM (Cyberpunk Key Card with HWID Simulation)
+-- 1. ULTRA MODERN SECURE KEY SYSTEM
 -- ============================================================================
 local keyWrapper = Instance.new("Frame")
 keyWrapper.Size = UDim2.new(0, 520, 0, 360)
@@ -232,7 +230,6 @@ corner(keyWrapper, 24)
 stroke(keyWrapper, THEME.NeonPrimary, 2)
 createGlow(keyWrapper)
 
--- Top Futuristic Scanline Header
 local scanlineBar = Instance.new("Frame")
 scanlineBar.Size = UDim2.new(1, -50, 0, 2)
 scanlineBar.Position = UDim2.new(0, 25, 0, 75)
@@ -274,7 +271,6 @@ keySub.TextXAlignment = Enum.TextXAlignment.Center
 keySub.ZIndex = 12
 keySub.Parent = keyWrapper
 
--- HWID Simulation Display Box
 local hwidBox = Instance.new("Frame")
 hwidBox.Size = UDim2.new(0, 430, 0, 36)
 hwidBox.Position = UDim2.new(0.5, -215, 0, 125)
@@ -289,14 +285,13 @@ hwidText.Size = UDim2.new(1, -15, 1, 0)
 hwidText.Position = UDim2.new(0, 10, 0, 0)
 hwidText.BackgroundTransparency = 1
 hwidText.RichText = true
-hwidText.Text = "<font color='#38BDF8'>HWID:</font> <font color='#8B5CF6'>GV-SYS-9942-X86-SECURE</font>"
+hwidText.Text = "<font color='#38BDF8'>HWID:</font> <font color='#8B5CF6'>GV-SYS-MITTY-SECURE</font>"
 hwidText.Font = Enum.Font.Code
 hwidText.TextSize = 11
 hwidText.TextXAlignment = Enum.TextXAlignment.Left
 hwidText.ZIndex = 13
 hwidText.Parent = hwidBox
 
--- Key Text Input Box
 local keyBox = Instance.new("TextBox")
 keyBox.Size = UDim2.new(0, 430, 0, 46)
 keyBox.Position = UDim2.new(0.5, -215, 0, 175)
@@ -314,7 +309,6 @@ keyBox.Parent = keyWrapper
 corner(keyBox, 10)
 stroke(keyBox, THEME.NeonPrimary, 1.5)
 
--- Verify Button
 local verifyBtn = Instance.new("TextButton")
 verifyBtn.Size = UDim2.new(0, 210, 0, 46)
 verifyBtn.Position = UDim2.new(0.5, -215, 0, 235)
@@ -328,7 +322,6 @@ verifyBtn.Parent = keyWrapper
 
 corner(verifyBtn, 10)
 
--- Get Key Link Button
 local getKeyBtn = Instance.new("TextButton")
 getKeyBtn.Size = UDim2.new(0, 210, 0, 46)
 getKeyBtn.Position = UDim2.new(0.5, 5, 0, 235)
@@ -343,31 +336,19 @@ getKeyBtn.Parent = keyWrapper
 corner(getKeyBtn, 10)
 stroke(getKeyBtn, THEME.NeonAccent, 1)
 
--- Footer Encryption Status Badge
-local securityBadge = Instance.new("TextLabel")
-securityBadge.Size = UDim2.new(1, -50, 0, 25)
-securityBadge.Position = UDim2.new(0, 25, 0, 305)
-securityBadge.BackgroundTransparency = 1
-securityBadge.RichText = true
-securityBadge.Text = "<font color='#34D399'>[QUANTUM ENCRYPTION ACTIVE]</font> <font color='#38BDF8'>// v3.0 ULTIMATE</font>"
-securityBadge.Font = Enum.Font.Code
-securityBadge.TextSize = 11
-securityBadge.TextXAlignment = Enum.TextXAlignment.Center
-securityBadge.ZIndex = 12
-securityBadge.Parent = keyWrapper
-
 getKeyBtn.MouseButton1Click:Connect(function()
     pcall(function()
         setclipboard("https://discord.gg/dvrptTbUTr")
     end)
     getKeyBtn.Text = "<font color='#34D399'><b>LINK COPIED!</b></font>"
+    showNotification("<font color='#38BDF8'>// ENLACE</font>", "<font color='#F5F3FF'>Enlace del servidor copiado al portapapeles.</font>", 3)
     task.delay(2, function()
         getKeyBtn.Text = "<font color='#38BDF8'><b>GET KEY LINK</b></font>"
     end)
 end)
 
 -- ============================================================================
--- 2. WELCOME SEQUENCE CONTAINER (Post-Validation Fullscreen Loader)
+-- 2. WELCOME SEQUENCE CONTAINER
 -- ============================================================================
 local centerWrapper = Instance.new("Frame")
 centerWrapper.Size = UDim2.new(0, 460, 0, 260)
@@ -387,7 +368,7 @@ titleWelcome.Size = UDim2.new(1, -40, 0, 40)
 titleWelcome.Position = UDim2.new(0, 20, 0, 30)
 titleWelcome.BackgroundTransparency = 1
 titleWelcome.RichText = true
-titleWelcome.Text = "<font color='#C026D3'>GOOD VIBES</font> <font color='#38BDF8'>// INITIALIZING</font>"
+titleWelcome.Text = "<font color='#C026D3'>GOOD VIBES</font> <font color='#38BDF8'>// MITTY'S EDITION</font>"
 titleWelcome.Font = Enum.Font.Code
 titleWelcome.TextSize = 18
 titleWelcome.TextXAlignment = Enum.TextXAlignment.Center
@@ -399,7 +380,7 @@ vibesLabel.Size = UDim2.new(1, -40, 0, 30)
 vibesLabel.Position = UDim2.new(0, 20, 0, 85)
 vibesLabel.BackgroundTransparency = 1
 vibesLabel.RichText = true
-vibesLabel.Text = "<font color='#F472B6'>loading</font> <font color='#C084FC'>ultimate</font> <font color='#38BDF8'>power...</font>"
+vibesLabel.Text = "<font color='#F472B6'>cargando</font> <font color='#C084FC'>el imperio</font> <font color='#38BDF8'>de la patrona...</font>"
 vibesLabel.Font = Enum.Font.Code
 vibesLabel.TextSize = 15
 vibesLabel.TextXAlignment = Enum.TextXAlignment.Center
@@ -411,7 +392,7 @@ statusLabel.Size = UDim2.new(1, -40, 0, 30)
 statusLabel.Position = UDim2.new(0, 20, 0, 130)
 statusLabel.BackgroundTransparency = 1
 statusLabel.RichText = true
-statusLabel.Text = "<font color='#38BDF8'>Inyectando</font> <font color='#34D399'>4000+ animaciones</font> <font color='#FBBF24'>sin</font> <font color='#F87171'>lag...</font>"
+statusLabel.Text = "<font color='#38BDF8'>Sincronizando</font> <font color='#34D399'>@mittyxktty</font> <font color='#FBBF24'>con</font> <font color='#F87171'>Discord...</font>"
 statusLabel.Font = Enum.Font.Code
 statusLabel.TextSize = 13
 statusLabel.TextXAlignment = Enum.TextXAlignment.Center
@@ -431,7 +412,7 @@ userGreeting.ZIndex = 12
 userGreeting.Parent = centerWrapper
 
 -- ============================================================================
--- 3. MAIN ULTIMATE UI HUD (Floating Toggle & Expanded Dashboard)
+-- 3. MAIN ULTIMATE UI HUD
 -- ============================================================================
 local mainButton = Instance.new("ImageButton")
 mainButton.Size = UDim2.new(0, 56, 0, 56)
@@ -447,7 +428,6 @@ corner(mainButton, 18)
 stroke(mainButton, THEME.NeonPrimary, 2)
 createGlow(mainButton)
 
--- Expanded Ultimate Dashboard Frame (Wider and Taller for massive features)
 local mainFrame = Instance.new("Frame")
 mainFrame.Size = UDim2.new(0, 680, 0, 520)
 mainFrame.Position = UDim2.new(0, 75, 0, 0)
@@ -460,7 +440,6 @@ corner(mainFrame, 20)
 stroke(mainFrame, THEME.NeonPrimary, 2.5)
 createGlow(mainFrame)
 
--- Key Validation Connection Logic
 verifyBtn.MouseButton1Click:Connect(function()
     if keyBox.Text == "Emilyy forever" then
         keyWrapper:Destroy()
@@ -474,10 +453,15 @@ verifyBtn.MouseButton1Click:Connect(function()
         })
         tweenIn:Play()
 
-        showNotification("<font color='#34D399'>// KEY VALIDADA</font>", "<font color='#F5F3FF'>Acceso cuántico concedido. Iniciando Good Vibes Ultimate.</font>", 5)
+        showNotification("<font color='#34D399'>// KEY VALIDADA</font>", "<font color='#F5F3FF'>Bienvenido al espacio privado de mittyxktty.</font>", 5)
+
+        -- Important compatibility notification on startup
+        task.delay(2, function()
+            showNotification("<font color='#FBBF24'>⚠️ AVISO DE COMPATIBILIDAD</font>", "<font color='#F5F3FF'>Las animaciones operan al 100% en esqueletos <b>R6</b>. Solo el modo 'Doggy' cuenta con soporte adaptativo para R15.</font>", 7)
+        end)
 
         task.spawn(function()
-            task.wait(7)
+            task.wait(8)
 
             local tweenOut = TweenService:Create(centerWrapper, TweenInfo.new(0.8, Enum.EasingStyle.Quart, Enum.EasingDirection.In), {
                 Size = UDim2.new(0, 400, 0, 220),
@@ -500,24 +484,31 @@ verifyBtn.MouseButton1Click:Connect(function()
 
             mainButton.Visible = true
 
-            -- Periodic Discord Support reminders
+            -- Sensual & teasing notification loop for mittyxktty & Discord
             task.spawn(function()
+                task.wait(10)
                 while true do
-                    task.wait(300)
-                    showNotification("<font color='#38BDF8'>// DISCORD OFICIAL</font>", "<font color='#F472B6'>¡Únete al servidor oficial para nuevas animaciones cada semana!</font>", 6)
+                    local sensualMsgs = {
+                        "<font color='#F472B6'>La patrona <b>@mittyxktty</b> te está esperando en el servidor de Discord... ¿Te atreves a entrar a saludarla? 💜</font>",
+                        "<font color='#C026D3'>No olvides pasar a su Instagram <b>@mittyxktty</b> y dejarle tu amor. ¡Te está vigilando desde allá! ✨</font>",
+                        "<font color='#38BDF8'>Mitty siente que estás tardando mucho en unirte al Discord oficial... Ve antes de que se enoje. 🔥</font>",
+                        "<font color='#F472B6'>¿Ya sigues a la dueña <b>@mittyxktty</b>? Ve a su perfil de IG, tiene una sorpresita para ti... 💋</font>"
+                    }
+                    local msg = sensualMsgs[math.random(1, #sensualMsgs)]
+                    showNotification("<font color='#C026D3'>// MENSAJE DE LA PATRONA</font>", msg, 6)
+                    task.wait(200)
                 end
             end)
         end)
     else
         verifyBtn.Text = "<font color='#F87171'><b>ACCESS DENIED!</b></font>"
-        showNotification("<font color='#F87171'>// ERROR DE KEY</font>", "<font color='#F5F3FF'>La Key ingresada es incorrecta. Prueba con la key correcta.</font>", 3)
+        showNotification("<font color='#F87171'>// ERROR DE KEY</font>", "<font color='#F5F3FF'>Key incorrecta. Mitty no te dejará pasar con esa clave.</font>", 3)
         task.delay(2, function()
             verifyBtn.Text = "<font color='#FFFFFF'><b>VERIFY ACCESS</b></font>"
         end)
     end
 end)
 
--- Header Bar with Real-Time Performance Monitor (FPS + Ping + Server Load)
 local header = Instance.new("Frame")
 header.Size = UDim2.new(1, 0, 0, 55)
 header.BackgroundColor3 = THEME.Container
@@ -527,13 +518,13 @@ header.Parent = mainFrame
 corner(header, 20)
 
 local titleLabel = Instance.new("TextLabel")
-titleLabel.Size = UDim2.new(0, 280, 1, 0)
+titleLabel.Size = UDim2.new(0, 320, 1, 0)
 titleLabel.Position = UDim2.new(0, 20, 0, 0)
 titleLabel.BackgroundTransparency = 1
 titleLabel.RichText = true
-titleLabel.Text = "<font color='#C026D3'><b>GOOD VIBES</b></font> <font color='#38BDF8'>ULTIMATE</font>"
+titleLabel.Text = "<font color='#C026D3'><b>GOOD VIBES</b></font> <font color='#38BDF8'>// MITTY'S WORLD</font>"
 titleLabel.Font = Enum.Font.Code
-titleLabel.TextSize = 16
+titleLabel.TextSize = 15
 titleLabel.TextXAlignment = Enum.TextXAlignment.Left
 titleLabel.Parent = header
 
@@ -542,13 +533,12 @@ statsBadge.Size = UDim2.new(0, 250, 1, 0)
 statsBadge.Position = UDim2.new(1, -265, 0, 0)
 statsBadge.BackgroundTransparency = 1
 statsBadge.RichText = true
-statsBadge.Text = "<font color='#34D399'>● ONLINE</font> <font color='#38BDF8'>| FPS: 60 | PING: 0ms</font>"
+statsBadge.Text = "<font color='#34D399'>● MITTY: ONLINE</font> <font color='#38BDF8'>| 60 FPS</font>"
 statsBadge.Font = Enum.Font.Code
 statsBadge.TextSize = 11
 statsBadge.TextXAlignment = Enum.TextXAlignment.Right
 statsBadge.Parent = header
 
--- Stats updater loop
 task.spawn(function()
     local lastUpdate = tick()
     local frameCount = 0
@@ -557,14 +547,13 @@ task.spawn(function()
         if tick() - lastUpdate >= 1 then
             local fps = frameCount
             local pingVal = math.floor(LocalPlayer:GetNetworkPing() * 1000 + 0.5)
-            statsBadge.Text = string.format("<font color='#34D399'>● ONLINE</font> <font color='#38BDF8'>| FPS: %d | PING: %dms</font>", fps, pingVal)
+            statsBadge.Text = string.format("<font color='#34D399'>● MITTY: ONLINE</font> <font color='#38BDF8'>| FPS: %d | %dms</font>", fps, pingVal)
             frameCount = 0
             lastUpdate = tick()
         end
     end)
 end)
 
--- Navigation Bar inside Main Dashboard
 local navBar = Instance.new("Frame")
 navBar.Size = UDim2.new(1, -30, 0, 44)
 navBar.Position = UDim2.new(0, 15, 0, 65)
@@ -592,20 +581,18 @@ local function createNavButton(iconId)
     return btn
 end
 
-local tabBtn1 = createNavButton("rbxassetid://139047461910753") -- Animations Tab
-local tabBtn2 = createNavButton("rbxassetid://73960259669066") -- Config/Settings Tab
+local tabBtn1 = createNavButton("rbxassetid://139047461910753")
+local tabBtn2 = createNavButton("rbxassetid://73960259669066")
 
--- Info Tab Button ("!")
 local tabBtn3 = Instance.new("TextButton")
 tabBtn3.Size = UDim2.new(0, 32, 0, 32)
 tabBtn3.BackgroundTransparency = 1
-tabBtn3.Text = "!"
+tabBtn3.Text = "♥"
 tabBtn3.TextColor3 = THEME.Subtext
 tabBtn3.Font = Enum.Font.Code
-tabBtn3.TextSize = 20
+tabBtn3.TextSize = 22
 tabBtn3.Parent = navBar
 
--- Content Panels Holder
 local contentHolder = Instance.new("Frame")
 contentHolder.Size = UDim2.new(1, -30, 1, -130)
 contentHolder.Position = UDim2.new(0, 15, 0, 118)
@@ -613,14 +600,13 @@ contentHolder.BackgroundTransparency = 1
 contentHolder.Parent = mainFrame
 
 -- ============================================================================
--- PANEL 1: MAIN ANIMATION & TARGET SELECTOR DASHBOARD
+-- PANEL 1: ANIMATIONS DASHBOARD
 -- ============================================================================
 local panel1 = Instance.new("Frame")
 panel1.Size = UDim2.new(1, 0, 1, 0)
 panel1.BackgroundTransparency = 1
 panel1.Parent = contentHolder
 
--- Left Container (Target Input + Massive Animation Scrolling Feed)
 local leftContainer = Instance.new("Frame")
 leftContainer.Size = UDim2.new(0.61, 0, 1, 0)
 leftContainer.BackgroundTransparency = 1
@@ -642,7 +628,10 @@ namebox.Parent = leftContainer
 corner(namebox, 10)
 stroke(namebox, THEME.NeonPrimary, 1.5)
 
--- Scrolling Animation Feed
+namebox.Focused:Connect(function()
+    showNotification("<font color='#38BDF8'>// OBJETIVO</font>", "<font color='#F5F3FF'>Introduce el nombre del jugador para fijar el objetivo.</font>", 2.5)
+end)
+
 local scrollframe2 = Instance.new("ScrollingFrame")
 scrollframe2.Size = UDim2.new(1, 0, 1, -52)
 scrollframe2.Position = UDim2.new(0, 0, 0, 52)
@@ -659,7 +648,6 @@ scrollframelist2.SortOrder = Enum.SortOrder.LayoutOrder
 scrollframelist2.Padding = UDim.new(0, 7)
 scrollframelist2.Parent = scrollframe2
 
--- Right Container (Interactive Player List)
 local rightContainer = Instance.new("Frame")
 rightContainer.Size = UDim2.new(0.375, 0, 1, 0)
 rightContainer.Position = UDim2.new(0.625, 0, 0, 0)
@@ -740,7 +728,7 @@ corner(fix, 10)
 stroke(fix, THEME.Error, 1.5)
 
 -- ============================================================================
--- PANEL 3: HELP & SUPPORT
+-- PANEL 3: MITTY'S IG & COMMUNITY SUPPORT PANEL
 -- ============================================================================
 local panel3 = Instance.new("Frame")
 panel3.Size = UDim2.new(1, 0, 1, 0)
@@ -752,21 +740,21 @@ local infolabel = Instance.new("TextLabel")
 infolabel.Size = UDim2.new(1, 0, 0, 35)
 infolabel.BackgroundTransparency = 1
 infolabel.RichText = true
-infolabel.Text = "<font color='#38BDF8'>// COMMUNITY & SUPPORT</font>"
+infolabel.Text = "<font color='#38BDF8'>// LA PATRONA // MITTYXKTTY</font>"
 infolabel.Font = Enum.Font.Code
 infolabel.TextSize = 13
 infolabel.TextXAlignment = Enum.TextXAlignment.Left
 infolabel.Parent = panel3
 
 local infodesc = Instance.new("TextLabel")
-infodesc.Size = UDim2.new(1, 0, 0, 120)
-infodesc.Position = UDim2.new(0, 0, 0, 45)
+infodesc.Size = UDim2.new(1, 0, 0, 95)
+infodesc.Position = UDim2.new(0, 0, 0, 40)
 infodesc.BackgroundColor3 = THEME.Container
 infodesc.RichText = true
-infodesc.Text = " <font color='#C026D3'>Good Vibes Ultimate</font> cuenta con más de 4000+\n optimizaciones y animaciones ejecutadas de forma fluida.\n ¿Tienes sugerencias o bugs? Únete a nuestra\n comunidad oficial en Discord."
+infodesc.Text = " <font color='#C026D3'>Mitty</font> te espera en su servidor privado y en su Instagram.\n Sigue a la patrona para desbloquear todo el contenido exclusivo\n y recibir sorpresas directas de ella. 💜"
 infodesc.TextColor3 = THEME.Subtext
 infodesc.Font = Enum.Font.Code
-infodesc.TextSize = 13
+infodesc.TextSize = 12
 infodesc.TextXAlignment = Enum.TextXAlignment.Left
 infodesc.TextYAlignment = Enum.TextYAlignment.Center
 infodesc.Parent = panel3
@@ -774,22 +762,59 @@ infodesc.Parent = panel3
 corner(infodesc, 10)
 stroke(infodesc, Color3.fromRGB(60, 40, 80), 1.5)
 
+-- Instagram Button for @mittyxktty
+local igBtn = Instance.new("TextButton")
+igBtn.Size = UDim2.new(1, 0, 0, 46)
+igBtn.Position = UDim2.new(0, 0, 0, 145)
+igBtn.BackgroundColor3 = THEME.Container
+igBtn.RichText = true
+igBtn.Text = "IG: <font color='#C026D3'><b>@mittyxktty</b></font> (Copiar Enlace)"
+igBtn.TextColor3 = THEME.Text
+igBtn.Font = Enum.Font.Code
+igBtn.TextSize = 13
+igBtn.Parent = panel3
+
+corner(igBtn, 10)
+stroke(igBtn, THEME.NeonPrimary, 1.5)
+
+igBtn.MouseButton1Click:Connect(function()
+    pcall(function()
+        setclipboard("https://instagram.com/mittyxktty")
+    end)
+    igBtn.Text = "<font color='#34D399'><b>¡IG COPIADO CON ÉXITO! (@mittyxktty)</b></font>"
+    showNotification("<font color='#C026D3'>// INSTAGRAM</font>", "<font color='#F5F3FF'>¡Ve a seguir a la patrona @mittyxktty en su Instagram ahora mismo! 💋</font>", 4)
+    task.delay(2.5, function()
+        igBtn.Text = "IG: <font color='#C026D3'><b>@mittyxktty</b></font> (Copiar Enlace)"
+    end)
+end)
+
 local discordBtn = Instance.new("TextButton")
-discordBtn.Size = UDim2.new(1, 0, 0, 50)
-discordBtn.Position = UDim2.new(0, 0, 0, 180)
+discordBtn.Size = UDim2.new(1, 0, 0, 46)
+discordBtn.Position = UDim2.new(0, 0, 0, 202)
 discordBtn.BackgroundColor3 = THEME.Container
-discordBtn.Text = "JOIN DISCORD SERVER"
-discordBtn.TextColor3 = THEME.NeonPrimary
+discordBtn.Text = "UNIRSE AL DISCORD DE MITTY"
+discordBtn.TextColor3 = THEME.NeonAccent
 discordBtn.Font = Enum.Font.Code
-discordBtn.TextSize = 14
+discordBtn.TextSize = 13
 discordBtn.Parent = panel3
 
 corner(discordBtn, 10)
-stroke(discordBtn, THEME.NeonPrimary, 1.5)
+stroke(discordBtn, THEME.NeonAccent, 1.5)
 
--- Tab Switch Actions
+discordBtn.MouseButton1Click:Connect(function()
+    pcall(function()
+        setclipboard("https://discord.gg/dvrptTbUTr")
+    end)
+    discordBtn.Text = "¡DISCORD COPIADO!"
+    showNotification("<font color='#38BDF8'>// DISCORD</font>", "<font color='#F5F3FF'>Mitty te espera en el servidor. ¡Entra ya y saluda! 💜</font>", 3)
+    task.delay(2, function()
+        discordBtn.Text = "UNIRSE AL DISCORD DE MITTY"
+    end)
+end)
+
+-- Tab Switch Actions with Enhanced Notifications
 fix.MouseButton1Click:Connect(function()
-    showNotification("<font color='#F87171'>// SISTEMA</font>", "<font color='#F5F3FF'>Cerrando interfaz por completo...</font>", 3)
+    showNotification("<font color='#F87171'>// SISTEMA</font>", "<font color='#F5F3FF'>Terminando procesos y cerrando Good Vibes...</font>", 3)
     task.wait(1)
     screen:Destroy()
 end)
@@ -797,18 +822,7 @@ end)
 drag.MouseButton1Click:Connect(function()
     mainButton.Draggable = not mainButton.Draggable
     drag.Text = mainButton.Draggable and "Toggle Draggable HUD: [ACTIVE]" or "Toggle Draggable HUD: [OFF]"
-    showNotification("<font color='#38BDF8'>// CONFIG</font>", "<font color='#F5F3FF'>Estado de movimiento actualizado.</font>", 2)
-end)
-
-discordBtn.MouseButton1Click:Connect(function()
-    pcall(function()
-        setclipboard("https://discord.gg/dvrptTbUTr")
-    end)
-    discordBtn.Text = "LINK COPIED TO CLIPBOARD!"
-    showNotification("<font color='#34D399'>// DISCORD</font>", "<font color='#F5F3FF'>Enlace copiado al portapapeles con éxito.</font>", 3)
-    task.delay(2, function()
-        discordBtn.Text = "JOIN DISCORD SERVER"
-    end)
+    showNotification("<font color='#38BDF8'>// CONFIGURACIÓN</font>", "<font color='#F5F3FF'>Modo de arrastre del HUD actualizado.</font>", 2.5)
 end)
 
 tabBtn1.MouseButton1Click:Connect(function()
@@ -818,6 +832,7 @@ tabBtn1.MouseButton1Click:Connect(function()
     tabBtn1.ImageColor3 = THEME.NeonPrimary
     tabBtn2.ImageColor3 = THEME.Subtext
     tabBtn3.TextColor3 = THEME.Subtext
+    showNotification("<font color='#38BDF8'>// NAVEGACIÓN</font>", "<font color='#F5F3FF'>Panel de animaciones y bucles cargado.</font>", 2)
 end)
 
 tabBtn2.MouseButton1Click:Connect(function()
@@ -827,6 +842,7 @@ tabBtn2.MouseButton1Click:Connect(function()
     tabBtn2.ImageColor3 = THEME.NeonPrimary
     tabBtn1.ImageColor3 = THEME.Subtext
     tabBtn3.TextColor3 = THEME.Subtext
+    showNotification("<font color='#38BDF8'>// NAVEGACIÓN</font>", "<font color='#F5F3FF'>Panel de configuraciones y sistema abierto.</font>", 2)
 end)
 
 tabBtn3.MouseButton1Click:Connect(function()
@@ -836,10 +852,13 @@ tabBtn3.MouseButton1Click:Connect(function()
     tabBtn3.TextColor3 = THEME.NeonPrimary
     tabBtn1.ImageColor3 = THEME.Subtext
     tabBtn2.ImageColor3 = THEME.Subtext
+    showNotification("<font color='#C026D3'>// LA PATRONA</font>", "<font color='#F5F3FF'>Abriendo acceso directo al Instagram de @mittyxktty y Discord.</font>", 2.5)
 end)
 
 mainButton.MouseButton1Click:Connect(function()
     mainFrame.Visible = not mainFrame.Visible
+    local stateText = mainFrame.Visible and "Interfaz desplegada." : "Interfaz minimizada."
+    showNotification("<font color='#38BDF8'>// HUD</font>", "<font color='#F5F3FF'>" .. stateText .. "</font>", 2)
 end)
 
 -- Player List Population
@@ -860,7 +879,7 @@ local function player(name)
 
     playername.MouseButton1Click:Connect(function()
         namebox.Text = name
-        showNotification("<font color='#38BDF8'>// TARGET</font>", "<font color='#F5F3FF'>Objetivo fijado: " .. name .. "</font>", 2)
+        showNotification("<font color='#38BDF8'>// OBJETIVO SELECCIONADO</font>", "<font color='#F5F3FF'>Objetivo fijado exitosamente a: <b>" .. name .. "</b></font>", 3)
     end)
 end
 
@@ -881,7 +900,6 @@ Players.PlayerAdded:Connect(refreshPlayerList)
 Players.PlayerRemoving:Connect(refreshPlayerList)
 refreshPlayerList()
 
--- Safe Animator Helper with Multi-Speed Control
 local function loadAndPlayAnim(humanoid, assetId, speedVal)
     local success, track = pcall(function()
         local anim = Instance.new("Animation")
@@ -900,7 +918,6 @@ local function loadAndPlayAnim(humanoid, assetId, speedVal)
     return nil
 end
 
--- Teleport & Animation System 1 (Backshots & Close Proximity Loops)
 local function se(nam, Ida, Idb, Idc, Idd, ssa, ssb, duration, sp, cof1, cof2, speed, tog)
     local isTeleporting = false
     local targetPlayer = nil
@@ -963,11 +980,11 @@ local function se(nam, Ida, Idb, Idc, Idd, ssa, ssb, duration, sp, cof1, cof2, s
 
         if isTeleporting then
             isTeleporting = false
-            showNotification("<font color='#F87171'>// ACCIÓN</font>", "<font color='#F5F3FF'>Detenido: " .. nam .. "</font>", 2)
+            showNotification("<font color='#F87171'>// ACCIÓN DETENIDA</font>", "<font color='#F5F3FF'>Se ha detenido el bucle: <b>" .. nam .. "</b></font>", 3)
         else
             isTeleporting = true
             startTeleport()
-            showNotification("<font color='#34D399'>// ACCIÓN</font>", "<font color='#F5F3FF'>Ejecutando: " .. nam .. "</font>", 2)
+            showNotification("<font color='#34D399'>// ACCIÓN EJECUTADA</font>", "<font color='#F5F3FF'>Iniciando animación <b>" .. nam .. "</b> (Optimizado para R6)</font>", 3)
         end
 
         local character = LocalPlayer.Character
@@ -1008,7 +1025,6 @@ local function se(nam, Ida, Idb, Idc, Idd, ssa, ssb, duration, sp, cof1, cof2, s
     end)
 end
 
--- Teleport & Animation System 2 (With LookAt orientation lock)
 local function se2(nam, Ida, Idb, Idc, Idd, ssa, ssb, duration, sp, cof1, cof2, speed, tog)
     local isTeleporting = false
     local targetPlayer = nil
@@ -1084,13 +1100,13 @@ local function se2(nam, Ida, Idb, Idc, Idd, ssa, ssb, duration, sp, cof1, cof2, 
             isTeleporting = false
             animationButton.BackgroundColor3 = THEME.Element
             animationButton.TextColor3 = THEME.Subtext
-            showNotification("<font color='#F87171'>// ACCIÓN</font>", "<font color='#F5F3FF'>Detenido: " .. nam .. "</font>", 2)
+            showNotification("<font color='#F87171'>// ACCIÓN DETENIDA</font>", "<font color='#F5F3FF'>Se ha detenido el bucle: <b>" .. nam .. "</b></font>", 3)
         else
             isTeleporting = true
             animationButton.BackgroundColor3 = THEME.NeonSecondary
             animationButton.TextColor3 = THEME.Background
             startTeleport()
-            showNotification("<font color='#34D399'>// ACCIÓN</font>", "<font color='#F5F3FF'>Ejecutando: " .. nam .. "</font>", 2)
+            showNotification("<font color='#34D399'>// ACCIÓN EJECUTADA</font>", "<font color='#F5F3FF'>Iniciando interacción <b>" .. nam .. "</b> (Optimizado para R6)</font>", 3)
         end
 
         local character = LocalPlayer.Character
@@ -1119,7 +1135,6 @@ local function se2(nam, Ida, Idb, Idc, Idd, ssa, ssb, duration, sp, cof1, cof2, 
     end)
 end
 
--- Section Text Generator
 local function text(categoryName)
     local sectionLabel = Instance.new("TextLabel")
     sectionLabel.Size = UDim2.new(0.95, 0, 0, 28)
@@ -1132,9 +1147,26 @@ local function text(categoryName)
     sectionLabel.Parent = scrollframe2
 end
 
--- ============================================================================
--- MASSIVE EXPANDED ANIMATION LIBRARY (Thousands of variations & categories)
--- ============================================================================
+-- Warning info label at the top of the animation catalog
+local warningBanner = Instance.new("TextButton")
+warningBanner.Size = UDim2.new(0.95, 0, 0, 48)
+warningBanner.BackgroundColor3 = Color3.fromRGB(25, 12, 35)
+warningBanner.RichText = true
+warningBanner.Text = " <font color='#FBBF24'><b>⚠️ AVISO:</b></font> <font color='#F5F3FF'>Diseñado exclusivamente para <b>R6</b>. Únicamente el modo 'Doggy' cuenta con soporte R15.</font>"
+warningBanner.TextColor3 = THEME.Text
+warningBanner.Font = Enum.Font.Code
+warningBanner.TextSize = 10
+warningBanner.TextWrapped = true
+warningBanner.TextXAlignment = Enum.TextXAlignment.Left
+warningBanner.Parent = scrollframe2
+
+corner(warningBanner, 8)
+stroke(warningBanner, Color3.fromRGB(245, 158, 11), 1)
+
+warningBanner.MouseButton1Click:Connect(function()
+    showNotification("<font color='#FBBF24'>// AVISO TÉCNICO</font>", "<font color='#F5F3FF'>Recuerda utilizar un avatar tipo R6 para que todas las animaciones fluyan correctamente. Solo las funciones de la categoría Doggy admiten R15.</font>", 5)
+end)
+
 text("Backshot V1 - Pro Series")
 se("Ultra Slow Backshot V1","182789003", "106772613", "10714360343", "182789003","0","0",1, 0, CFrame.new(0, 0, -1), CFrame.new(0, 0, -2), 10, 1)
 se("Default Backshot V1","182789003", "106772613", "10714360343", "182789003","0","0",1, 0, CFrame.new(0, 0, -1), CFrame.new(0, 0, -2), 10, 0.5)
@@ -1173,3 +1205,4 @@ se2("Neon Kiss","225975820", "283545583", "0", "0","0","0",0.2, 0, CFrame.new(0,
 se("Cyber Sleepy","282574440", "106772613", "0", "0","0","0",0, 1, CFrame.new(0, 0, 0), CFrame.new (0, 0, 0), 0, 0)
 se("Neural Lay Down","106772613", "181526230", "0", "0","0","0",0, 1, CFrame.new(0, 0, 0), CFrame.new (0, 0, 0), 0, 0)
 se2("Matrix Embrace","225975820", "106772613", "182789003", "0","0","0",0.5, 2, CFrame.new(0, 0, -1.2), CFrame.new(0, 0, -1.2), 20, 0.5)
+
