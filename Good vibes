@@ -1,13 +1,13 @@
 --[[
 ================================================================================
-    PROJECT: Good Vibes - Cyberpunk Violet Ultimate Edition (Ultra Modern v3.1)
+    PROJECT: Good Vibes - Cyberpunk Violet Ultimate Edition (Ultra Modern v3.2)
     Features: 
     - Futuristic Glassmorphism HUD & Neon Flow
     - Modern Key System with Hardware ID (HWID) Simulation & Status Badges
     - Massive Expanded Animation Library (Over 40+ Unique High-Performance Loops)
     - Real-time Performance Monitor, Interactive Tabs, & Cyberpunk Sound/Visual FX
     - Owner Integration: Instagram (@mittyxktty) & Sensual Notification Prompts
-    - Enhanced Action Notifications & R6/R15 Architecture Compatibility Warnings
+    - SUPERNOVA UNIGNORABLE NOTIFICATIONS (Top Center Screen)
 ================================================================================
 ]]
 
@@ -112,42 +112,67 @@ local function createGlow(parent)
     end)
 end
 
--- Ultra Modern Notification System Holder
+-- ============================================================================
+-- SUPERNOVA NOTIFICATION SYSTEM (TOP CENTER - IMPOSSIBLE TO IGNORE)
+-- ============================================================================
 local notifHolder = Instance.new("Frame")
-notifHolder.Size = UDim2.new(0, 340, 1, -20)
-notifHolder.Position = UDim2.new(1, -355, 0, 10)
+notifHolder.Size = UDim2.new(0, 420, 1, -50)
+notifHolder.Position = UDim2.new(0.5, -210, 0, 30)
 notifHolder.BackgroundTransparency = 1
-notifHolder.ZIndex = 100
+notifHolder.ZIndex = 1000 -- Max ZIndex to overlap everything
 notifHolder.Parent = screen
 
 local notifLayout = Instance.new("UIListLayout")
-notifLayout.VerticalAlignment = Enum.VerticalAlignment.Bottom
-notifLayout.HorizontalAlignment = Enum.HorizontalAlignment.Right
+notifLayout.VerticalAlignment = Enum.VerticalAlignment.Top
+notifLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
 notifLayout.SortOrder = Enum.SortOrder.LayoutOrder
-notifLayout.Padding = UDim.new(0, 10)
+notifLayout.Padding = UDim.new(0, 15)
 notifLayout.Parent = notifHolder
 
 local function showNotification(title, message, duration)
     task.spawn(function()
+        local wrapper = Instance.new("Frame")
+        wrapper.Size = UDim2.new(0, 400, 0, 95)
+        wrapper.BackgroundTransparency = 1
+        wrapper.Parent = notifHolder
+        
         local card = Instance.new("Frame")
-        card.Size = UDim2.new(0, 330, 0, 80)
-        card.Position = UDim2.new(1, 60, 0, 0)
+        card.Size = UDim2.new(0, 0, 0, 0) -- Starts invisible for Supernova pop
+        card.AnchorPoint = Vector2.new(0.5, 0.5)
+        card.Position = UDim2.new(0.5, 0, 0.5, 0)
         card.BackgroundColor3 = THEME.Container
         card.BackgroundTransparency = 0.05
-        card.ZIndex = 101
-        card.Parent = notifHolder
+        card.ZIndex = 1001
+        card.Parent = wrapper
 
-        corner(card, 14)
-        stroke(card, THEME.NeonPrimary, 1.5)
+        corner(card, 16)
+        stroke(card, THEME.NeonAccent, 2.5)
+
+        -- SUPERNOVA FLASH EFFECT
+        local novaFlash = Instance.new("ImageLabel")
+        novaFlash.AnchorPoint = Vector2.new(0.5, 0.5)
+        novaFlash.Position = UDim2.new(0.5, 0, 0.5, 0)
+        novaFlash.Size = UDim2.new(0, 0, 0, 0)
+        novaFlash.BackgroundTransparency = 1
+        novaFlash.Image = "rbxassetid://6014261993"
+        novaFlash.ImageColor3 = Color3.fromRGB(255, 255, 255)
+        novaFlash.ZIndex = 1000
+        novaFlash.Parent = wrapper
+        
+        local flashTween = TweenService:Create(novaFlash, TweenInfo.new(0.6, Enum.EasingStyle.Exponential, Enum.EasingDirection.Out), {
+            Size = UDim2.new(3, 0, 3, 0),
+            ImageTransparency = 1,
+            ImageColor3 = THEME.NeonPrimary
+        })
 
         local indicator = Instance.new("Frame")
-        indicator.Size = UDim2.new(0, 4, 1, -16)
-        indicator.Position = UDim2.new(0, 8, 0, 8)
+        indicator.Size = UDim2.new(0, 6, 1, -20)
+        indicator.Position = UDim2.new(0, 10, 0, 10)
         indicator.BackgroundColor3 = THEME.NeonAccent
         indicator.BorderSizePixel = 0
-        indicator.ZIndex = 102
+        indicator.ZIndex = 1002
         indicator.Parent = card
-        corner(indicator, 2)
+        corner(indicator, 3)
         
         task.spawn(function()
             while indicator and indicator.Parent do
@@ -159,44 +184,50 @@ local function showNotification(title, message, duration)
         end)
 
         local tLabel = Instance.new("TextLabel")
-        tLabel.Size = UDim2.new(1, -30, 0, 24)
-        tLabel.Position = UDim2.new(0, 22, 0, 8)
+        tLabel.Size = UDim2.new(1, -30, 0, 30)
+        tLabel.Position = UDim2.new(0, 0, 0, 10)
         tLabel.BackgroundTransparency = 1
         tLabel.RichText = true
         tLabel.Text = title
         tLabel.Font = Enum.Font.Code
-        tLabel.TextSize = 13
-        tLabel.TextXAlignment = Enum.TextXAlignment.Left
-        tLabel.ZIndex = 102
+        tLabel.TextSize = 16
+        tLabel.TextXAlignment = Enum.TextXAlignment.Center -- Centered to be unignorable
+        tLabel.ZIndex = 1002
         tLabel.Parent = card
 
         local mLabel = Instance.new("TextLabel")
-        mLabel.Size = UDim2.new(1, -30, 0, 40)
-        mLabel.Position = UDim2.new(0, 22, 0, 32)
+        mLabel.Size = UDim2.new(1, -40, 0, 45)
+        mLabel.Position = UDim2.new(0, 20, 0, 40)
         mLabel.BackgroundTransparency = 1
         mLabel.RichText = true
         mLabel.Text = message
         mLabel.Font = Enum.Font.Code
-        mLabel.TextSize = 11
-        mLabel.TextXAlignment = Enum.TextXAlignment.Left
+        mLabel.TextSize = 13
+        mLabel.TextXAlignment = Enum.TextXAlignment.Center
         mLabel.TextWrapped = true
-        mLabel.ZIndex = 102
+        mLabel.ZIndex = 1002
         mLabel.Parent = card
 
-        local tweenIn = TweenService:Create(card, TweenInfo.new(0.4, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {
-            Position = UDim2.new(0, 0, 0, 0)
+        -- Execute Supernova & Pop in
+        flashTween:Play()
+        local tweenIn = TweenService:Create(card, TweenInfo.new(0.5, Enum.EasingStyle.Elastic, Enum.EasingDirection.Out), {
+            Size = UDim2.new(1, 0, 1, 0)
         })
         tweenIn:Play()
-        tweenIn.Completed:Wait()
+        
+        task.delay(0.6, function()
+            if novaFlash then novaFlash:Destroy() end
+        end)
 
         task.wait(duration or 4)
 
-        local tweenOut = TweenService:Create(card, TweenInfo.new(0.4, Enum.EasingStyle.Quart, Enum.EasingDirection.In), {
-            Position = UDim2.new(1, 60, 0, 0)
+        -- Shrink out
+        local tweenOut = TweenService:Create(card, TweenInfo.new(0.3, Enum.EasingStyle.Back, Enum.EasingDirection.In), {
+            Size = UDim2.new(0, 0, 0, 0)
         })
         tweenOut:Play()
         tweenOut.Completed:Wait()
-        card:Destroy()
+        wrapper:Destroy()
     end)
 end
 
@@ -453,11 +484,10 @@ verifyBtn.MouseButton1Click:Connect(function()
         })
         tweenIn:Play()
 
-        showNotification("<font color='#34D399'>// KEY VALIDADA</font>", "<font color='#F5F3FF'>Bienvenido al espacio privado de mittyxktty.</font>", 5)
+        showNotification("<font color='#34D399'><b>// KEY VALIDADA</b></font>", "<font color='#F5F3FF'>Bienvenido al espacio privado de mittyxktty.</font>", 5)
 
-        -- Important compatibility notification on startup
         task.delay(2, function()
-            showNotification("<font color='#FBBF24'>⚠️ AVISO DE COMPATIBILIDAD</font>", "<font color='#F5F3FF'>Las animaciones operan al 100% en esqueletos <b>R6</b>. Solo el modo 'Doggy' cuenta con soporte adaptativo para R15.</font>", 7)
+            showNotification("<font color='#FBBF24'><b>⚠️ AVISO DE COMPATIBILIDAD</b></font>", "<font color='#F5F3FF'>Las animaciones operan al 100% en esqueletos <b>R6</b>. Solo el modo 'Doggy' cuenta con soporte adaptativo para R15.</font>", 7)
         end)
 
         task.spawn(function()
@@ -484,7 +514,6 @@ verifyBtn.MouseButton1Click:Connect(function()
 
             mainButton.Visible = true
 
-            -- Sensual & teasing notification loop for mittyxktty & Discord
             task.spawn(function()
                 task.wait(10)
                 while true do
@@ -495,14 +524,14 @@ verifyBtn.MouseButton1Click:Connect(function()
                         "<font color='#F472B6'>¿Ya sigues a la dueña <b>@mittyxktty</b>? Ve a su perfil de IG, tiene una sorpresita para ti... 💋</font>"
                     }
                     local msg = sensualMsgs[math.random(1, #sensualMsgs)]
-                    showNotification("<font color='#C026D3'>// MENSAJE DE LA PATRONA</font>", msg, 6)
+                    showNotification("<font color='#C026D3'><b>// MENSAJE DE LA PATRONA</b></font>", msg, 6)
                     task.wait(200)
                 end
             end)
         end)
     else
         verifyBtn.Text = "<font color='#F87171'><b>ACCESS DENIED!</b></font>"
-        showNotification("<font color='#F87171'>// ERROR DE KEY</font>", "<font color='#F5F3FF'>Key incorrecta. Mitty no te dejará pasar con esa clave.</font>", 3)
+        showNotification("<font color='#F87171'><b>// ERROR DE KEY</b></font>", "<font color='#F5F3FF'>Key incorrecta. Mitty no te dejará pasar con esa clave.</font>", 3)
         task.delay(2, function()
             verifyBtn.Text = "<font color='#FFFFFF'><b>VERIFY ACCESS</b></font>"
         end)
@@ -629,7 +658,7 @@ corner(namebox, 10)
 stroke(namebox, THEME.NeonPrimary, 1.5)
 
 namebox.Focused:Connect(function()
-    showNotification("<font color='#38BDF8'>// OBJETIVO</font>", "<font color='#F5F3FF'>Introduce el nombre del jugador para fijar el objetivo.</font>", 2.5)
+    showNotification("<font color='#38BDF8'><b>// OBJETIVO</b></font>", "<font color='#F5F3FF'>Introduce el nombre del jugador para fijar el objetivo.</font>", 2.5)
 end)
 
 local scrollframe2 = Instance.new("ScrollingFrame")
@@ -782,7 +811,7 @@ igBtn.MouseButton1Click:Connect(function()
         setclipboard("https://instagram.com/mittyxktty")
     end)
     igBtn.Text = "<font color='#34D399'><b>¡IG COPIADO CON ÉXITO! (@mittyxktty)</b></font>"
-    showNotification("<font color='#C026D3'>// INSTAGRAM</font>", "<font color='#F5F3FF'>¡Ve a seguir a la patrona @mittyxktty en su Instagram ahora mismo! 💋</font>", 4)
+    showNotification("<font color='#C026D3'><b>// INSTAGRAM</b></font>", "<font color='#F5F3FF'>¡Ve a seguir a la patrona @mittyxktty en su Instagram ahora mismo! 💋</font>", 4)
     task.delay(2.5, function()
         igBtn.Text = "IG: <font color='#C026D3'><b>@mittyxktty</b></font> (Copiar Enlace)"
     end)
@@ -806,7 +835,7 @@ discordBtn.MouseButton1Click:Connect(function()
         setclipboard("https://discord.gg/dvrptTbUTr")
     end)
     discordBtn.Text = "¡DISCORD COPIADO!"
-    showNotification("<font color='#38BDF8'>// DISCORD</font>", "<font color='#F5F3FF'>Mitty te espera en el servidor. ¡Entra ya y saluda! 💜</font>", 3)
+    showNotification("<font color='#38BDF8'><b>// DISCORD</b></font>", "<font color='#F5F3FF'>Mitty te espera en el servidor. ¡Entra ya y saluda! 💜</font>", 3)
     task.delay(2, function()
         discordBtn.Text = "UNIRSE AL DISCORD DE MITTY"
     end)
@@ -814,7 +843,7 @@ end)
 
 -- Tab Switch Actions with Enhanced Notifications
 fix.MouseButton1Click:Connect(function()
-    showNotification("<font color='#F87171'>// SISTEMA</font>", "<font color='#F5F3FF'>Terminando procesos y cerrando Good Vibes...</font>", 3)
+    showNotification("<font color='#F87171'><b>// SISTEMA</b></font>", "<font color='#F5F3FF'>Terminando procesos y cerrando Good Vibes...</font>", 3)
     task.wait(1)
     screen:Destroy()
 end)
@@ -822,7 +851,7 @@ end)
 drag.MouseButton1Click:Connect(function()
     mainButton.Draggable = not mainButton.Draggable
     drag.Text = mainButton.Draggable and "Toggle Draggable HUD: [ACTIVE]" or "Toggle Draggable HUD: [OFF]"
-    showNotification("<font color='#38BDF8'>// CONFIGURACIÓN</font>", "<font color='#F5F3FF'>Modo de arrastre del HUD actualizado.</font>", 2.5)
+    showNotification("<font color='#38BDF8'><b>// CONFIGURACIÓN</b></font>", "<font color='#F5F3FF'>Modo de arrastre del HUD actualizado.</font>", 2.5)
 end)
 
 tabBtn1.MouseButton1Click:Connect(function()
@@ -832,7 +861,7 @@ tabBtn1.MouseButton1Click:Connect(function()
     tabBtn1.ImageColor3 = THEME.NeonPrimary
     tabBtn2.ImageColor3 = THEME.Subtext
     tabBtn3.TextColor3 = THEME.Subtext
-    showNotification("<font color='#38BDF8'>// NAVEGACIÓN</font>", "<font color='#F5F3FF'>Panel de animaciones y bucles cargado.</font>", 2)
+    showNotification("<font color='#38BDF8'><b>// NAVEGACIÓN</b></font>", "<font color='#F5F3FF'>Panel de animaciones y bucles cargado.</font>", 2)
 end)
 
 tabBtn2.MouseButton1Click:Connect(function()
@@ -842,7 +871,7 @@ tabBtn2.MouseButton1Click:Connect(function()
     tabBtn2.ImageColor3 = THEME.NeonPrimary
     tabBtn1.ImageColor3 = THEME.Subtext
     tabBtn3.TextColor3 = THEME.Subtext
-    showNotification("<font color='#38BDF8'>// NAVEGACIÓN</font>", "<font color='#F5F3FF'>Panel de configuraciones y sistema abierto.</font>", 2)
+    showNotification("<font color='#38BDF8'><b>// NAVEGACIÓN</b></font>", "<font color='#F5F3FF'>Panel de configuraciones y sistema abierto.</font>", 2)
 end)
 
 tabBtn3.MouseButton1Click:Connect(function()
@@ -852,13 +881,13 @@ tabBtn3.MouseButton1Click:Connect(function()
     tabBtn3.TextColor3 = THEME.NeonPrimary
     tabBtn1.ImageColor3 = THEME.Subtext
     tabBtn2.ImageColor3 = THEME.Subtext
-    showNotification("<font color='#C026D3'>// LA PATRONA</font>", "<font color='#F5F3FF'>Abriendo acceso directo al Instagram de @mittyxktty y Discord.</font>", 2.5)
+    showNotification("<font color='#C026D3'><b>// LA PATRONA</b></font>", "<font color='#F5F3FF'>Abriendo acceso directo al Instagram de @mittyxktty y Discord.</font>", 2.5)
 end)
 
 mainButton.MouseButton1Click:Connect(function()
     mainFrame.Visible = not mainFrame.Visible
     local stateText = mainFrame.Visible and "Interfaz desplegada." : "Interfaz minimizada."
-    showNotification("<font color='#38BDF8'>// HUD</font>", "<font color='#F5F3FF'>" .. stateText .. "</font>", 2)
+    showNotification("<font color='#38BDF8'><b>// HUD</b></font>", "<font color='#F5F3FF'>" .. stateText .. "</font>", 2)
 end)
 
 -- Player List Population
@@ -879,7 +908,7 @@ local function player(name)
 
     playername.MouseButton1Click:Connect(function()
         namebox.Text = name
-        showNotification("<font color='#38BDF8'>// OBJETIVO SELECCIONADO</font>", "<font color='#F5F3FF'>Objetivo fijado exitosamente a: <b>" .. name .. "</b></font>", 3)
+        showNotification("<font color='#38BDF8'><b>// OBJETIVO SELECCIONADO</b></font>", "<font color='#F5F3FF'>Objetivo fijado exitosamente a: <b>" .. name .. "</b></font>", 3)
     end)
 end
 
@@ -980,11 +1009,11 @@ local function se(nam, Ida, Idb, Idc, Idd, ssa, ssb, duration, sp, cof1, cof2, s
 
         if isTeleporting then
             isTeleporting = false
-            showNotification("<font color='#F87171'>// ACCIÓN DETENIDA</font>", "<font color='#F5F3FF'>Se ha detenido el bucle: <b>" .. nam .. "</b></font>", 3)
+            showNotification("<font color='#F87171'><b>// ACCIÓN DETENIDA</b></font>", "<font color='#F5F3FF'>Se ha detenido el bucle: <b>" .. nam .. "</b></font>", 3)
         else
             isTeleporting = true
             startTeleport()
-            showNotification("<font color='#34D399'>// ACCIÓN EJECUTADA</font>", "<font color='#F5F3FF'>Iniciando animación <b>" .. nam .. "</b> (Optimizado para R6)</font>", 3)
+            showNotification("<font color='#34D399'><b>// ACCIÓN EJECUTADA</b></font>", "<font color='#F5F3FF'>Iniciando animación <b>" .. nam .. "</b> (Optimizado para R6)</font>", 3)
         end
 
         local character = LocalPlayer.Character
@@ -1100,13 +1129,13 @@ local function se2(nam, Ida, Idb, Idc, Idd, ssa, ssb, duration, sp, cof1, cof2, 
             isTeleporting = false
             animationButton.BackgroundColor3 = THEME.Element
             animationButton.TextColor3 = THEME.Subtext
-            showNotification("<font color='#F87171'>// ACCIÓN DETENIDA</font>", "<font color='#F5F3FF'>Se ha detenido el bucle: <b>" .. nam .. "</b></font>", 3)
+            showNotification("<font color='#F87171'><b>// ACCIÓN DETENIDA</b></font>", "<font color='#F5F3FF'>Se ha detenido el bucle: <b>" .. nam .. "</b></font>", 3)
         else
             isTeleporting = true
             animationButton.BackgroundColor3 = THEME.NeonSecondary
             animationButton.TextColor3 = THEME.Background
             startTeleport()
-            showNotification("<font color='#34D399'>// ACCIÓN EJECUTADA</font>", "<font color='#F5F3FF'>Iniciando interacción <b>" .. nam .. "</b> (Optimizado para R6)</font>", 3)
+            showNotification("<font color='#34D399'><b>// ACCIÓN EJECUTADA</b></font>", "<font color='#F5F3FF'>Iniciando interacción <b>" .. nam .. "</b> (Optimizado para R6)</font>", 3)
         end
 
         local character = LocalPlayer.Character
@@ -1164,7 +1193,7 @@ corner(warningBanner, 8)
 stroke(warningBanner, Color3.fromRGB(245, 158, 11), 1)
 
 warningBanner.MouseButton1Click:Connect(function()
-    showNotification("<font color='#FBBF24'>// AVISO TÉCNICO</font>", "<font color='#F5F3FF'>Recuerda utilizar un avatar tipo R6 para que todas las animaciones fluyan correctamente. Solo las funciones de la categoría Doggy admiten R15.</font>", 5)
+    showNotification("<font color='#FBBF24'><b>// AVISO TÉCNICO</b></font>", "<font color='#F5F3FF'>Recuerda utilizar un avatar tipo R6 para que todas las animaciones fluyan correctamente. Solo las funciones de la categoría Doggy admiten R15.</font>", 5)
 end)
 
 text("Backshot V1 - Pro Series")
@@ -1205,4 +1234,3 @@ se2("Neon Kiss","225975820", "283545583", "0", "0","0","0",0.2, 0, CFrame.new(0,
 se("Cyber Sleepy","282574440", "106772613", "0", "0","0","0",0, 1, CFrame.new(0, 0, 0), CFrame.new (0, 0, 0), 0, 0)
 se("Neural Lay Down","106772613", "181526230", "0", "0","0","0",0, 1, CFrame.new(0, 0, 0), CFrame.new (0, 0, 0), 0, 0)
 se2("Matrix Embrace","225975820", "106772613", "182789003", "0","0","0",0.5, 2, CFrame.new(0, 0, -1.2), CFrame.new(0, 0, -1.2), 20, 0.5)
-
